@@ -1,0 +1,3 @@
+[submodule "xsl"]
+	path = xsl
+	url = https://github.com/jjrsylvestre/mathbook-xsl.git
