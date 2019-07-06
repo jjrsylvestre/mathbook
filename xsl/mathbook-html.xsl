@@ -175,7 +175,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Expanding ToC -->
 <!-- What level to start allowing expanding/contracting in the ToC. -->
 <!-- For example, "3" in a book with parts would have sections      -->
-<!-- visible but subsections hidding behind a "drop-down" symbol.   -->
+<!-- visible but subsections hiding behind a "drop-down" symbol.    -->
 <xsl:param name="html.toc.expandlevel" select="'9999'" />
 
 <!-- Annotation -->
