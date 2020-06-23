@@ -57,6 +57,21 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Common Options -->
 <!-- ############### -->
 
+<!-- Managing multiple versions from the same source.   -->
+<!-- Text of @version-label-list should be a space- or  -->
+<!-- comma-separated list of version labels to target.  -->
+<xsl:variable name="version-label-list">
+    <xsl:choose>
+        <xsl:when test="$publication/output-version/@version-label-list">
+            <xsl:value-of select="$publication/output-version/@version-label-list"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+
 <!-- ############## -->
 <!-- Source Options -->
 <!-- ############## -->

@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!--********************************************************************
+Copyright 2015 Robert A. Beezer
+
+This file is part of MathBook XML.
+
+MathBook XML is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 2 or version 3 of the
+License (at your option).
+
+MathBook XML is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
+*********************************************************************-->
+
+<!--                                                   -->
+<!-- To process this file, first play around with      -->
+<!-- the "output-version" setting in publication.xml,  -->
+<!-- choosing zero or more of                          -->
+<!--   fancy-notation                                  -->
+<!--   verbose                                         -->
+<!--   condensed                                       -->
+<!--   really-condensed                                -->
+<!-- to include in this setting as a space- or         -->
+<!-- comma-separted list.                              -->
+<!--                                                   -->
+<!-- Output will change depending on this setting.     -->
+<!--                                                   -->
+<!--                                                   -->
+<!-- (1) LaTeX/PDF:                                    -->
+<!--     xsltproc \                                    -->
+<!--       -stringparam publisher publication.xml \    -->
+<!--       -o multiple-versions.tex \                  -->
+<!--       mathbook/xsl/pretext-latex.xsl \            -->
+<!--       multiple-versions.xml                       -->
+<!--     pdflatex multiple-versions.tex                -->
+<!--     xelatex multiple-versions.tex                 -->
+<!--                                                   -->
+<!-- (2) HTML:                                         -->
+<!--     xsltproc \                                    -->
+<!--       -stringparam publisher publication.xml \    -->
+<!--       mathbook/xsl/pretext-html.xsl \             -->
+<!--       multiple-versions.xml                       -->
+<!--     <browser>  multiple-versions.html             -->
+<!--                                                   -->
+
+<pretext>
+
+    <docinfo>
+        <macros>
+            <!-- We can change notation based on version ... see section-latex-macros below. -->
+            <restrictversion onlyin     ="fancy-notation"> \newcommand{\doubler}[1]{2 \cdot #1} </restrictversion>
+            <restrictversion excludefrom="fancy-notation"> \newcommand{\doubler}[1]{2#1} </restrictversion>
+        </macros>
+    </docinfo>
+
+    <article xml:id="multiple-versions">
+        <title>A Small Article With Many Versions</title>
+
+        <frontmatter>
+
+            <titlepage>
+                <author>
+                    <personname>Robert A. Beezer</personname>
+                    <institution>University of Puget Sound</institution>
+                </author>
+                <date><today /></date>
+            </titlepage>
+
+            <abstract>
+                <p>This is a short article to demonstrate managing multiple versions from the same source.</p>
+            </abstract>
+
+        </frontmatter>
+
+        <introduction>
+            <p>
+            This is a short paragraph to introduce the article.
+            It is optional, in case it would be preferable to have the first section be titled an <q>Introduction.</q>
+            </p>
+            <p onlyin="verbose">
+            We can include/exclude an entire <pretext /> content element by simply adding either
+            an <attr>onlyin</attr> or an <attr>excludefrom</attr> attribute.
+            For example, this entire paragraph will appear <q><attr>onlyin</attr></q> the <q>verbose</q> version.
+            </p>
+            <p>
+            We can include/exclude
+            <restrictversion onlyin="verbose">snippets or even</restrictversion>
+            individual words by wrapping them in a <tag>restrictversion</tag> tag
+            that is endowed with an <attr>onlyin</attr> or an <attr>excludefrom</attr> attribute.
+            (If you don't have <q>verbose</q> version listed in your output-version setting in the publication file
+            for this example, the previous sentence will be missing some words.)
+            </p>
+        </introduction>
+
+        <section xml:id="section-disappearing" excludefrom="condensed,really-condensed">
+            <title>Disappearing Section</title>
+            <p>This whole section will disappear from the <q>condensed</q> and <q>really-condensed</q> versions.</p>
+        </section>
+
+        <section xml:id="section-nesting">
+            <title>Nesting</title>
+            <p onlyin="really-condensed">
+                If you want to know more about nesting <attr>onlyin</attr>/<attr>excludefrom</attr>-tagged
+                elements you should turn off the <q>really-condensed</q> version label in the publication file.
+                Note that at the moment you will get a warning from <pretext/> that a section shouldn't
+                have a bare <tag>p</tag> as sibling to a <tag>subsection</tag> because the code raising
+                this warning doesn't yet know about this <attr>onlyin</attr>/<attr>excludefrom</attr>
+                stuff (or maybe just needs to be run <em>after</em> the assembly phase instead of
+                during it).
+            </p>
+            <subsection xml:id="subsection-nesting-disappearing" excludefrom="really-condensed">
+                <title>Disappearing subsection</title>
+                <introduction><p>This whole subsection will not appear in the <q>really-condensed</q> version.</p></introduction>
+                <subsubsection excludefrom="condensed">
+                    <title>Disappearing subsubsection</title>
+                    <p>While this subsection will not appear in the <q>condensed</q> version.</p>
+                </subsubsection>
+                <subsubsection>
+                    <title>Necessary subsubsection</title>
+                    <p>
+                    Careful! If this subsubsection were not here the inclusion of an introduction/conclusion in this subsection would
+                    be a schema violation in the <q>condensed</q> version.
+                    </p>
+                </subsubsection>
+                <conclusion><p>
+                    If you care about consistency of numbering between versions,
+                    this method of managing multiple versions from the same source
+                    might not be for you.
+                </p></conclusion>
+            </subsection>
+        </section>
+
+        <section xml:id="section-xref">
+            <title>Cross References</title>
+            <p>
+            We should also be careful to manage cross-references to material that might not be there in various versions.
+            You can use <attr>onlyin</attr>/<attr>excludefrom</attr> to include/exclude either a cross-reference or some
+            alternative filler text (similar in function to the <attr>alt</attr> attribute for the <tag>img</tag> tag in HTML).
+            </p>
+            <p excludefrom="really-condensed">
+                For example, all versions except the <q>really-condensed</q> one contain this paragraph with a cross-reference
+                to the <xref ref="subsection-nesting-disappearing" text="title" />.
+            </p>
+            <p onlyin="really-condensed">
+                For example, this paragraph is filler text for the <q>really-condensed</q> version that might say something
+                like
+                <q>In a more advanced course on managing multiple versions of an article/textbook from the same source,
+                this paragraph would contain an example cross-reference to a <em>disappearing subsection</em>.</q>
+            </p>
+        </section>
+
+        <section xml:id="section-latex-macros">
+            <title>Changing Math Notation</title>
+            <p>The presentation of this Diophantine equation will look different in the <q>fancy-notation</q> version compared to all other versions:
+            <me> x^2 + \doubler{y^2} = z^2 </me>.
+            </p>
+        </section>
+
+    </article>
+
+</pretext>

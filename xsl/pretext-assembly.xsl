@@ -93,6 +93,54 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- NB: source repair below converts a /mathbook to a /pretext    -->
 <xsl:variable name="root" select="$duplicate/pretext" />
 
+<!-- ######################## -->
+<!-- Multiple Versions        -->
+<!-- ######################## -->
+
+<!-- Include or exclude certain content based on matching list of   -->
+<!-- version tags to provided list in publisher file.               -->
+<!-- Attributes:                                                    -->
+<!--   @onlyin...........content will be dropped *unless* at least  -->
+<!--                     one of the provided tags in this attribute -->
+<!--                     matches one publisher file setting in      -->
+<!--   @excludefrom......content will be dropped *if* at least one  -->
+<!--                     of the provided tags in this attribute     -->
+<!--                     matches one publisher file setting in      -->
+<!-- Special element:                                               -->
+<!--   restrictversion...element only exists to carry               -->
+<!--                     @onlyin/@excludefrom attributes            -->
+<!--                     ...use case: can be used to wrap snippets  -->
+<!--                     that are only part of the content of a     -->
+<!--                     parent element                             -->
+<xsl:variable name="output-version" select="str:tokenize($version-label-list,' ,')"/>
+
+<xsl:template match="restrictversion[@onlyin]" mode="assembly">
+    <xsl:if test="count(str:tokenize(@onlyin,' ,')[. = $output-version]) &gt; 0">
+        <xsl:apply-templates select="node()|text()" mode="assembly"/>
+    </xsl:if>
+</xsl:template>
+
+<xsl:template match="*[@onlyin]" mode="assembly">
+    <xsl:if test="count(str:tokenize(@onlyin,' ,')[. = $output-version]) &gt; 0">
+        <xsl:copy>
+            <xsl:apply-templates select="@*[name(.)!='onlyin']|node()|text()" mode="assembly"/>
+        </xsl:copy>
+    </xsl:if>
+</xsl:template>
+
+<xsl:template match="restrictversion[@excludefrom]" mode="assembly">
+    <xsl:if test="count(str:tokenize(@excludefrom,' ,')[. = $output-version]) = 0">
+        <xsl:apply-templates select="node()|text()" mode="assembly"/>
+    </xsl:if>
+</xsl:template>
+
+<xsl:template match="*[@excludefrom]" mode="assembly">
+    <xsl:if test="count(str:tokenize(@excludefrom,' ,')[. = $output-version]) = 0">
+        <xsl:copy>
+            <xsl:apply-templates select="@*[name(.)!='excludefrom']|node()|text()" mode="assembly"/>
+        </xsl:copy>
+    </xsl:if>
+</xsl:template>
 
 <!-- ######################## -->
 <!-- Bibliography Manufacture -->
