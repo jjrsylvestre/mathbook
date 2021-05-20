@@ -10855,45 +10855,70 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:attribute name="class">
                     <xsl:text>toc-line-row</xsl:text>
                 </xsl:attribute>
-                <xsl:element name="div">
-                    <xsl:attribute name="class">
-                        <xsl:text>toc-title-cell</xsl:text>
+                <xsl:choose>
+                    <xsl:when test="$on-a-leaf='false' and $toc-level &gt; $adjusted-depth and $html-toc-expandlevel &lt;= $adjusted-depth">
+                        <xsl:element name="div">
+                            <xsl:attribute name="class">
+                                <xsl:text>toc-caret-cell toc-caret</xsl:text>
+                                <xsl:if test="$in-this-subtree='true'">
+                                    <xsl:text> toc-caret-expanded</xsl:text>
+                                </xsl:if>
+                            </xsl:attribute>
+                            <xsl:text disable-output-escaping="yes"><![CDATA[&#x25b8;]]></xsl:text>
+                        </xsl:element>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:element name="div">
+                            <xsl:attribute name="class">
+                                <xsl:text>toc-caret-cell</xsl:text>
+                            </xsl:attribute>
+                            <xsl:text> </xsl:text>
+                        </xsl:element>
+                    </xsl:otherwise>
+                </xsl:choose>
+                <!-- From                                                                            -->
+                <!-- https://html.spec.whatwg.org/multipage/text-level-semantics.html#the-a-element  -->
+                <!-- "The a element can be wrapped around entire paragraphs, lists, tables, and so   -->
+                <!--  forth, even entire sections, so long as there is no interactive content within -->
+                <!--  (e.g., buttons or other links)."                                               -->
+                <xsl:element name="a">
+                    <xsl:attribute name="href">
+                        <xsl:apply-templates select="." mode="url"/>
                     </xsl:attribute>
-                    <xsl:element name="a">
-                        <xsl:attribute name="href">
-                            <xsl:apply-templates select="." mode="url"/>
-                        </xsl:attribute>
-                        <xsl:attribute name="data-scroll">
-                            <xsl:apply-templates select="." mode="html-id" />
-                        </xsl:attribute>
-                        <!-- TODO will the test below work the way I want it to? -->
-                        <xsl:for-each select="self::part|self::chapter|$root/article/*[count(.|self::section)=1]">
-                            <xsl:variable name="num">
-                                <xsl:apply-templates select="." mode="number" />
-                            </xsl:variable>
-                            <xsl:if test="$num!=''">
-                                <span class="codenumber">
-                                    <xsl:value-of select="$num" />
-                                </span>
-                                <xsl:text> </xsl:text>
-                            </xsl:if>
-                        </xsl:for-each>
-                        <span class="title">
-                            <xsl:apply-templates select="." mode="title-short" />
-                        </span>
-                    </xsl:element>
-                </xsl:element>
-                <xsl:if test="$on-a-leaf='false' and $toc-level &gt; $adjusted-depth and $html-toc-expandlevel &lt;= $adjusted-depth">
+                    <xsl:attribute name="data-scroll">
+                        <xsl:apply-templates select="." mode="html-id" />
+                    </xsl:attribute>
                     <xsl:element name="div">
                         <xsl:attribute name="class">
-                            <xsl:text>toc-caret</xsl:text>
-                            <xsl:if test="$in-this-subtree='true'">
-                                <xsl:text> toc-caret-expanded</xsl:text>
-                            </xsl:if>
+                            <xsl:text>toc-codenumber-cell</xsl:text>
                         </xsl:attribute>
-                        <xsl:text disable-output-escaping="yes"><![CDATA[&#x25bd;]]></xsl:text>
+                        <xsl:variable name="toc-item-codenum">
+                            <!-- TODO will the test below work the way I want it to? -->
+                            <xsl:for-each select="self::part|self::chapter|$root/article/*[count(.|self::section)=1]">
+                                <xsl:variable name="num">
+                                    <xsl:apply-templates select="." mode="number" />
+                                </xsl:variable>
+                                <xsl:if test="$num!=''">
+                                    <xsl:value-of select="$num" />
+                                </xsl:if>
+                            </xsl:for-each>
+                        </xsl:variable>
+                        <xsl:choose>
+                            <xsl:when test="$toc-item-codenum!=''">
+                                <xsl:value-of select="$toc-item-codenum" />
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:text> </xsl:text>
+                            </xsl:otherwise>
+                        </xsl:choose>
                     </xsl:element>
-                </xsl:if>
+                    <xsl:element name="div">
+                        <xsl:attribute name="class">
+                            <xsl:text>toc-title-cell</xsl:text>
+                        </xsl:attribute>
+                        <xsl:apply-templates select="." mode="title-short" />
+                    </xsl:element>
+                </xsl:element>
             </xsl:element>
         </xsl:element>
         <xsl:if test="$on-a-leaf='false' and $toc-level &gt; $adjusted-depth">

@@ -1,0 +1,181 @@
+
+/************************/
+/* copied from toc.css  */
+/************************/
+
+#toc {
+  /* IMPORTANT height must be calculated by javascript. */
+    /* width: 240px; */
+    margin: 0;
+    font-size: 14.72px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.toc-nested {
+    display: none;
+}
+
+.toc-nested-show {
+    display: block;
+}
+
+#toc div.toc-line-table {
+    display: table;
+}
+
+#toc div.toc-line-row {
+    display: table-row;
+}
+
+#toc div.toc-title-cell {
+    display: table-cell;
+    padding-right: 1em;
+}
+
+/* Aligns toc to the top and side of the allotted space, respectively */
+#toc ul {
+    margin: 0px;
+    padding: 0px;
+}
+
+/* Places section titles */
+#toc .title {
+    margin-left: 1.4em;
+    display: inline-block;
+}
+
+#toc a {
+    position: relative;
+    display: inline-block;
+    /* padding: 2.86957px; */
+    /* padding-left: 1em; */
+    border-top: none;
+    border-bottom: none;
+    width: 100%;
+}
+
+/* Places codenumbers */
+#toc .codenumber {
+    position: relative;  /* used to be absolute, but that will be relative to viewport if it has no positioned ancestors */
+    margin-right: 0;
+    margin-left: 0em;
+/*
+    margin-top: 0.4px;
+*/
+    left: 0.3em;
+    display: inline-block;
+}
+
+
+#toc li > div {
+    width: 100%;
+    padding: 2.86957px;
+    /* border-top: 1px solid #d1d1d1; */
+    border-bottom: 1px solid #d1d1d1;
+}
+
+#toc div.toc-caret {
+    display: table-cell;
+    padding-right: 1em;  /* TODO wouldn't need this if gave both sub div's the same class like toc-line-cell */
+    width: 1em;
+    color: black;
+    cursor: pointer;
+    vertical-align: top;
+    font-size: 70%;
+}
+
+#toc div.toc-caret-expanded {
+    padding-right: 0;  /* TODO same comment as for padding-right on .toc-caret above */
+    padding-left: 1em;  /* TODO same comment as for padding-right on .toc-caret above */
+    vertical-align: bottom;
+    -ms-transform: rotate(180deg); /* IE 9 */
+    -webkit-transform: rotate(180deg); /* Safari */'
+    transform: rotate(180deg);
+}
+
+/* #toc ul li div div:first-child {
+    display: inline-block;
+    width: 224px;
+    overflow: hidden;
+    margin-right: 1.1em;
+} */
+
+#toc li.subsection div.toc-title-cell {
+    padding-left: 1em;
+}
+
+#toc li.subsubsection div.toc-title-cell {
+    padding-left: 2em;
+}
+
+/********************/
+/*   COLORS         */
+/********************/
+
+#toc li.part > div {
+    color: #222222;
+    background-color: var(--bodytitlehighlight);
+    margin-top: 15px;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    font-size: 110%;
+    border-bottom: none;
+}
+
+#toc li.part > div :hover {
+    color: #ffffff;
+    background-color: var(--highlighttoc);
+}
+
+#toc li.chapter > div,
+#toc li.frontmatter > div,
+#toc li.backmatter > div,
+#toc li.backmatter > ul > li > div,
+#toc > ul > li.section > div
+{
+  color: #505050;
+  color: var(--chaptertoctext);
+  background-color: #dbf5ff;
+  background-color: var(--chaptertoc);
+  border-color: #afc2e5;
+  border-color: var(--tocborder);
+}
+
+#toc li.chapter > div :hover,
+#toc li.frontmatter > div :hover,
+#toc li.backmatter > div :hover,
+#toc li.backmatter > ul > li > div :hover,
+#toc > ul > li.section > div :hover
+{
+    color: #321a0c;
+    color: var(--highlighttoctext);
+    background-color: #fac793;
+    background-color: var(--highlighttoc);
+    border-color: #ec704b;
+    border-color: var(--highlighttocborder);
+}
+
+#toc li.chapter > ul > li > div,
+#toc li.frontmatter > ul > li > div,
+#toc li.backmatter > ul > li > ul > li > div,
+#toc > ul > li.section > ul > li > div
+{
+  color: #404040;
+  color: var(--sectiontoctext);
+  background-color: #ffffff;
+  background-color: var(--sectiontoc);
+}
+
+#toc li.chapter > ul > li div.toc-line-table :hover,
+#toc li.frontmatter > ul > li div.toc-line-table :hover,
+#toc li.backmatter > ul > li > ul > li div.toc-line-table :hover,
+#toc > ul > li.section > ul > li div.toc-line-table :hover
+{
+    color: #321a0c;
+    color: var(--highlighttoctext);
+    background-color: #fac793;
+    background-color: var(--highlighttoc);
+    border-color: #ec704b;
+    border-color: var(--highlighttocborder);
+}

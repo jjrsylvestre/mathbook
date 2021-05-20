@@ -1,0 +1,488 @@
+<html>
+
+<head><style>
+
+#toc {
+  /* IMPORTANT height must be calculated by javascript. */
+    /* width: 240px; */
+    margin: 0;
+    font-size: 14.72px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+#toc div.toc-line-table {
+    display: table;
+}
+
+#toc div.toc-line-row {
+    display: table-row;
+}
+
+#toc :is(div.toc-caret-cell,div.toc-codenumber-cell,div.toc-title-cell) {
+    display: table-cell;
+}
+
+#toc :is(div.toc-caret-cell,div.toc-codenumber-cell) {
+    width: 1em;
+}
+
+#toc div.toc-caret {
+    /* padding-right: 0.25em; */
+    /* width: 1em; */
+    color: black;
+    cursor: pointer;
+    /* vertical-align: top; */
+    /* font-size: 70%; */
+}
+
+/* Aligns toc to the top and side of the allotted space, respectively */
+#toc ul {
+    margin: 0px;
+    padding: 0px;
+}
+
+</style></head>
+
+<body><nav id="toc">
+
+	<ul>
+		<li class="frontmatter link active">
+			<div class="toc-line-table">
+				<div class="toc-line-row">
+					<div class="toc-caret-cell toc-caret">&#x25b8;</div>
+					<a href="frontmatter-1.html" data-scroll="frontmatter-1">
+						<div class="toc-codenumber-cell"> </div>
+						<div class="toc-title-cell">Front Matter</div>
+					</a>
+				</div>
+			</div>
+			<ul class="toc-nested">
+				<li class="colophon link">
+					<div class="toc-line-table">
+						<div class="toc-line-row">
+							<div class="toc-caret-cell"> </div>
+							<a href="colophon-1.html" data-scroll="colophon-1">
+								<div class="toc-codenumber-cell"> </div>
+								<div class="toc-title-cell">Colophon</div>
+							</a>
+						</div>
+					</div>
+				</li>
+				<li class="biography link">
+					<div class="toc-line-table">
+						<div class="toc-line-row">
+							<div class="toc-caret-cell"> </div>
+							<a href="author-bio-JS.html" data-scroll="author-bio-JS">
+								<div class="toc-codenumber-cell"> </div>
+								<div class="toc-title-cell">Author Biography</div>
+							</a>
+						</div>
+					</div>
+				</li>
+				<li class="preface link">
+					<div class="toc-line-table">
+						<div class="toc-line-row">
+							<div class="toc-caret-cell"> </div>
+							<a href="preface-1.html" data-scroll="preface-1">
+								<div class="toc-codenumber-cell"> </div>
+								<div class="toc-title-cell">Preface</div>
+							</a>
+						</div>
+					</div>
+				</li>
+			</ul>
+		</li>
+		<li class="part link">
+			<div class="toc-line-table">
+				<div class="toc-line-row">
+					<div class="toc-caret-cell"> </div>
+					<a href="part-1.html" data-scroll="part-1">
+						<div class="toc-codenumber-cell">I</div>
+						<div class="toc-title-cell">A part</div>
+					</a>
+				</div>
+			</div>
+			<ul>
+				<li class="chapter link">
+					<div class="toc-line-table">
+						<div class="toc-line-row">
+							<div class="toc-caret-cell toc-caret">&#x25b8;</div>
+							<a href="chapter-1.html" data-scroll="chapter-1">
+								<div class="toc-codenumber-cell">1</div>
+								<div class="toc-title-cell">A chapter</div>
+							</a>
+						</div>
+					</div>
+					<ul class="toc-nested">
+						<li class="section link">
+							<div class="toc-line-table">
+								<div class="toc-line-row">
+									<div class="toc-caret-cell"> </div>
+									<a href="section-1.html" data-scroll="section-1">
+										<div class="toc-codenumber-cell"> </div>
+										<div class="toc-title-cell">A section</div>
+									</a>
+								</div>
+							</div>
+						</li>
+						<li class="section link">
+							<div class="toc-line-table">
+								<div class="toc-line-row">
+									<div class="toc-caret-cell"> </div>
+									<a href="section-2.html" data-scroll="section-2">
+										<div class="toc-codenumber-cell"> </div>
+										<div class="toc-title-cell">Another section</div>
+									</a>
+								</div>
+							</div>
+						</li>
+						<li class="section link">
+							<div class="toc-line-table">
+								<div class="toc-line-row">
+									<div class="toc-caret-cell"> </div>
+									<a href="section-3.html" data-scroll="section-3">
+										<div class="toc-codenumber-cell"> </div>
+										<div class="toc-title-cell">A section with no subsections</div>
+									</a>
+								</div>
+							</div>
+						</li>
+					</ul>
+				</li>
+				<li class="chapter link">
+					<div class="toc-line-table">
+						<div class="toc-line-row">
+							<div class="toc-caret-cell toc-caret">&#x25b8;</div>
+							<a href="chapter-2.html" data-scroll="chapter-2">
+								<div class="toc-codenumber-cell">2</div>
+								<div class="toc-title-cell">A repeat chapter</div>
+							</a>
+						</div>
+					</div>
+					<ul class="toc-nested">
+						<li class="section link">
+							<div class="toc-line-table">
+								<div class="toc-line-row">
+									<div class="toc-caret-cell"> </div>
+									<a href="section-4.html" data-scroll="section-4">
+										<div class="toc-codenumber-cell"> </div>
+										<div class="toc-title-cell">A section</div>
+									</a>
+								</div>
+							</div>
+						</li>
+						<li class="section link">
+							<div class="toc-line-table">
+								<div class="toc-line-row">
+									<div class="toc-caret-cell"> </div>
+									<a href="section-5.html" data-scroll="section-5">
+										<div class="toc-codenumber-cell"> </div>
+										<div class="toc-title-cell">Another section</div>
+									</a>
+								</div>
+							</div>
+						</li>
+						<li class="section link">
+							<div class="toc-line-table">
+								<div class="toc-line-row">
+									<div class="toc-caret-cell"> </div>
+									<a href="section-6.html" data-scroll="section-6">
+										<div class="toc-codenumber-cell"> </div>
+										<div class="toc-title-cell">A section with no subsections</div>
+									</a>
+								</div>
+							</div>
+						</li>
+					</ul>
+				</li>
+				<li class="chapter link">
+					<div class="toc-line-table">
+						<div class="toc-line-row">
+							<div class="toc-caret-cell"> </div>
+							<a href="chapter-3.html" data-scroll="chapter-3">
+								<div class="toc-codenumber-cell">3</div>
+								<div class="toc-title-cell">A chapter with no sections</div>
+							</a>
+						</div>
+					</div>
+				</li>
+			</ul>
+		</li>
+		<li class="part link">
+			<div class="toc-line-table">
+				<div class="toc-line-row">
+					<div class="toc-caret-cell"> </div>
+					<a href="part-2.html" data-scroll="part-2">
+						<div class="toc-codenumber-cell">II</div>
+						<div class="toc-title-cell">A repeat part</div>
+					</a>
+				</div>
+			</div>
+			<ul>
+				<li class="chapter link">
+					<div class="toc-line-table">
+						<div class="toc-line-row">
+							<div class="toc-caret-cell toc-caret">&#x25b8;</div>
+							<a href="chapter-4.html" data-scroll="chapter-4">
+								<div class="toc-codenumber-cell">4</div>
+								<div class="toc-title-cell">A chapter</div>
+							</a>
+						</div>
+					</div>
+					<ul class="toc-nested">
+						<li class="section link">
+							<div class="toc-line-table">
+								<div class="toc-line-row">
+									<div class="toc-caret-cell"> </div>
+									<a href="section-7.html" data-scroll="section-7">
+										<div class="toc-codenumber-cell"> </div>
+										<div class="toc-title-cell">A section</div>
+									</a>
+								</div>
+							</div>
+						</li>
+						<li class="section link">
+							<div class="toc-line-table">
+								<div class="toc-line-row">
+									<div class="toc-caret-cell"> </div>
+									<a href="section-8.html" data-scroll="section-8">
+										<div class="toc-codenumber-cell"> </div>
+										<div class="toc-title-cell">Another section</div>
+									</a>
+								</div>
+							</div>
+						</li>
+						<li class="section link">
+							<div class="toc-line-table">
+								<div class="toc-line-row">
+									<div class="toc-caret-cell"> </div>
+									<a href="section-9.html" data-scroll="section-9">
+										<div class="toc-codenumber-cell"> </div>
+										<div class="toc-title-cell">A section with no subsections</div>
+									</a>
+								</div>
+							</div>
+						</li>
+					</ul>
+				</li>
+				<li class="chapter link">
+					<div class="toc-line-table">
+						<div class="toc-line-row">
+							<div class="toc-caret-cell toc-caret">&#x25b8;</div>
+							<a href="chapter-5.html" data-scroll="chapter-5">
+								<div class="toc-codenumber-cell">5</div>
+								<div class="toc-title-cell">A repeat chapter</div>
+							</a>
+						</div>
+					</div>
+					<ul class="toc-nested">
+						<li class="section link">
+							<div class="toc-line-table">
+								<div class="toc-line-row">
+									<div class="toc-caret-cell"> </div>
+									<a href="section-10.html" data-scroll="section-10">
+										<div class="toc-codenumber-cell"> </div>
+										<div class="toc-title-cell">A section</div>
+									</a>
+								</div>
+							</div>
+						</li>
+						<li class="section link">
+							<div class="toc-line-table">
+								<div class="toc-line-row">
+									<div class="toc-caret-cell"> </div>
+									<a href="section-11.html" data-scroll="section-11">
+										<div class="toc-codenumber-cell"> </div>
+										<div class="toc-title-cell">Another section</div>
+									</a>
+								</div>
+							</div>
+						</li>
+						<li class="section link">
+							<div class="toc-line-table">
+								<div class="toc-line-row">
+									<div class="toc-caret-cell"> </div>
+									<a href="section-12.html" data-scroll="section-12">
+										<div class="toc-codenumber-cell"> </div>
+										<div class="toc-title-cell">A section with no subsections</div>
+									</a>
+								</div>
+							</div>
+						</li>
+					</ul>
+				</li>
+				<li class="chapter link">
+					<div class="toc-line-table">
+						<div class="toc-line-row">
+							<div class="toc-caret-cell"> </div>
+							<a href="chapter-6.html" data-scroll="chapter-6">
+								<div class="toc-codenumber-cell">6</div>
+								<div class="toc-title-cell">A chapter with no sections</div>
+							</a>
+						</div>
+					</div>
+				</li>
+			</ul>
+		</li>
+		<li class="backmatter link">
+			<div class="toc-line-table">
+				<div class="toc-line-row">
+					<div class="toc-caret-cell"> </div>
+					<a href="backmatter-1.html" data-scroll="backmatter-1">
+						<div class="toc-codenumber-cell"> </div>
+						<div class="toc-title-cell">Back Matter</div>
+					</a>
+				</div>
+			</div>
+			<ul>
+				<li class="appendix link">
+					<div class="toc-line-table">
+						<div class="toc-line-row">
+							<div class="toc-caret-cell toc-caret">&#x25b8;</div>
+							<a href="appendix-1.html" data-scroll="appendix-1">
+								<div class="toc-codenumber-cell"> </div>
+								<div class="toc-title-cell">An appendix</div>
+							</a>
+						</div>
+					</div>
+					<ul class="toc-nested">
+						<li class="section link">
+							<div class="toc-line-table">
+								<div class="toc-line-row">
+									<div class="toc-caret-cell"> </div>
+									<a href="section-13.html" data-scroll="section-13">
+										<div class="toc-codenumber-cell"> </div>
+										<div class="toc-title-cell">A section</div>
+									</a>
+								</div>
+							</div>
+						</li>
+						<li class="section link">
+							<div class="toc-line-table">
+								<div class="toc-line-row">
+									<div class="toc-caret-cell"> </div>
+									<a href="section-14.html" data-scroll="section-14">
+										<div class="toc-codenumber-cell"> </div>
+										<div class="toc-title-cell">Another section</div>
+									</a>
+								</div>
+							</div>
+						</li>
+						<li class="section link">
+							<div class="toc-line-table">
+								<div class="toc-line-row">
+									<div class="toc-caret-cell"> </div>
+									<a href="section-15.html" data-scroll="section-15">
+										<div class="toc-codenumber-cell"> </div>
+										<div class="toc-title-cell">A section with no subsections</div>
+									</a>
+								</div>
+							</div>
+						</li>
+					</ul>
+				</li>
+				<li class="appendix link">
+					<div class="toc-line-table">
+						<div class="toc-line-row">
+							<div class="toc-caret-cell toc-caret">&#x25b8;</div>
+							<a href="appendix-2.html" data-scroll="appendix-2">
+								<div class="toc-codenumber-cell"> </div>
+								<div class="toc-title-cell">A repeat appendix</div>
+							</a>
+						</div>
+					</div>
+					<ul class="toc-nested">
+						<li class="section link">
+							<div class="toc-line-table">
+								<div class="toc-line-row">
+									<div class="toc-caret-cell"> </div>
+									<a href="section-16.html" data-scroll="section-16">
+										<div class="toc-codenumber-cell"> </div>
+										<div class="toc-title-cell">A section</div>
+									</a>
+								</div>
+							</div>
+						</li>
+						<li class="section link">
+							<div class="toc-line-table">
+								<div class="toc-line-row">
+									<div class="toc-caret-cell"> </div>
+									<a href="section-17.html" data-scroll="section-17">
+										<div class="toc-codenumber-cell"> </div>
+										<div class="toc-title-cell">Another section</div>
+									</a>
+								</div>
+							</div>
+						</li>
+						<li class="section link">
+							<div class="toc-line-table">
+								<div class="toc-line-row">
+									<div class="toc-caret-cell"> </div>
+									<a href="section-18.html" data-scroll="section-18">
+										<div class="toc-codenumber-cell"> </div>
+										<div class="toc-title-cell">A section with no subsections</div>
+									</a>
+								</div>
+							</div>
+						</li>
+					</ul>
+				</li>
+				<li class="appendix link">
+					<div class="toc-line-table">
+						<div class="toc-line-row">
+							<div class="toc-caret-cell"> </div>
+							<a href="appendix-3.html" data-scroll="appendix-3">
+								<div class="toc-codenumber-cell"> </div>
+								<div class="toc-title-cell">An appendix with no sections</div>
+							</a>
+						</div>
+					</div>
+				</li>
+				<li class="references link">
+					<div class="toc-line-table">
+						<div class="toc-line-row">
+							<div class="toc-caret-cell"> </div>
+							<a href="references-1.html" data-scroll="references-1">
+								<div class="toc-codenumber-cell"> </div>
+								<div class="toc-title-cell">Bibliography</div>
+							</a>
+						</div>
+					</div>
+				</li>
+				<li class="index link">
+					<div class="toc-line-table">
+						<div class="toc-line-row">
+							<div class="toc-caret-cell"> </div>
+							<a href="index-of-nomenclature.html" data-scroll="index-of-nomenclature">
+								<div class="toc-codenumber-cell"> </div>
+								<div class="toc-title-cell">Index</div>
+							</a>
+						</div>
+					</div>
+				</li>
+				<li class="colophon link">
+					<div class="toc-line-table">
+						<div class="toc-line-row">
+							<div class="toc-caret-cell"> </div>
+							<a href="back-colophon.html" data-scroll="back-colophon">
+								<div class="toc-codenumber-cell"> </div>
+								<div class="toc-title-cell">Colophon</div>
+							</a>
+						</div>
+					</div>
+				</li>
+			</ul>
+		</li>
+		<script>var toc_toggler = document.getElementsByClassName("toc-caret");
+			var i;
+			for (i = 0; i < toc_toggler.length; i++) {
+				toc_toggler[i].addEventListener("click", function () {
+					this.parentElement.parentElement.parentElement.querySelector(".toc-nested").classList.toggle("toc-nested-show");
+					this.classList.toggle("toc-caret-expanded");
+				});
+			}
+		</script>
+	</ul>
+
+</nav></body></html>

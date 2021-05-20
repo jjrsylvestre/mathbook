@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<publication>
+
+    <numbering>
+        <divisions part-structure="decorative"/>
+    </numbering>
+
+    <html>
+        <!-- <css style="default" colors="blue_red"/> -->
+        <tableofcontents level="4" expandlevel="2" />
+    </html>
+
+</publication>
