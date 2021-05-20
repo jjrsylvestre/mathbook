@@ -1271,6 +1271,23 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:variable>
 
+<!--                    -->
+<!-- HTML Expanding TOC -->
+<!--                    -->
+
+<!-- What level to start allowing expanding/contracting in the ToC. -->
+<!-- For example, "3" in a book with parts would have sections      -->
+<!-- visible but subsections hiding behind a "drop-down" symbol.    -->
+<xsl:variable name="html-toc-expandlevel">
+    <xsl:choose>
+        <!-- if publisher.xml file has toc-expandlevel value, use it -->
+        <xsl:when test="$publication/html/tableofcontents/@expandlevel">
+            <xsl:value-of select="$publication/html/tableofcontents/@expandlevel"/>
+        </xsl:when>
+        <!-- otherwise no expanding -->
+        <xsl:otherwise>9999</xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
 
 <!--               -->
 <!-- HTML Base URL -->
