@@ -90,7 +90,7 @@
     padding-left: 1em;  /* TODO same comment as for padding-right on .toc-caret above */
     vertical-align: bottom;
     -ms-transform: rotate(180deg); /* IE 9 */
-    -webkit-transform: rotate(180deg); /* Safari */'
+    -webkit-transform: rotate(180deg); /* Safari */
     transform: rotate(180deg);
 }
 

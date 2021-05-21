@@ -1,0 +1,89 @@
+<html>
+
+<head><style>
+
+a {
+	text-decoration: none;
+	display: inline-block;
+}
+
+ul {
+	list-style-type: none;
+	margin: 0px;
+    padding: 0px;
+}
+
+.toc-caret {
+	flex-grow: 0;
+}
+
+.toc-caret-hide {
+    display: none;
+}
+
+.toc-caret-show,
+.toc-codenumber {
+    display: inline-block;
+	width: 2em;
+}
+
+.toc-codenumber {
+	position: relative;
+}
+
+li {
+	background-color: red;
+}
+
+li {
+	padding-left: 0.2em;
+	display: flex;
+	flex-wrap: nowrap;
+}
+
+li > a {
+	flex-grow: 1;
+}
+
+li:hover {
+	background-color: purple;
+}
+
+.toc-title-cell {
+	display: flex;
+}
+
+.toc-codenumber,
+.toc-title {
+	flex-grow: 1;
+}
+
+</style></head>
+
+<body>
+<ul>
+	<li>
+		<div class="toc-caret">
+			<span class="toc-caret-show">&#x25b8;</span>
+			<span class="toc-caret-hide">&#x25be;</span>
+		</div>
+		<a href="part-1.html" data-scroll="part-1">
+			<div class="toc-title-cell">
+				<span class="toc-codenumber">I</span>
+				<span class="toc-title">A part with a super long title it just keeps going and going and hey what do you know we are still going</span>
+			</div>
+		</a>
+	</li>
+	<li>
+		<div class="toc-caret"> </div>
+		<a href="part-1.html" data-scroll="part-1">
+			<div class="toc-title-cell">
+				<span class="toc-codenumber">&nbsp;</span>
+				<span class="toc-title">A part with a super long title it just keeps going and going and hey what do you know we are still going</span>
+			</div>
+		</a>
+	</li>
+</ul>
+</body>
+
+</html>

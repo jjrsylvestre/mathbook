@@ -17,7 +17,7 @@ fi
 
 cp expand.css build/html/developer.css
 
-/home/toughguy/local/src/git/forks/pretext/mathbook/pretext/pretext \
+${HOME}/local/src/git/forks/pretext/mathbook/pretext/pretext \
   --verbose \
   --component all \
   --format html \

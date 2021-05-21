@@ -6,9 +6,13 @@
         <divisions part-structure="decorative"/>
     </numbering>
 
+    <common>
+        <tableofcontents level="5" />
+    </common>
+
     <html>
         <!-- <css style="default" colors="blue_red"/> -->
-        <tableofcontents level="4" expandlevel="2" />
+        <tableofcontents expandlevel="2" />
     </html>
 
 </publication>

@@ -10710,9 +10710,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <div class="sidebar-content">
             <xsl:if test="$b-has-toc">
                 <nav id="toc">
-                    <ul>
+                    <xsl:element name="ul">
+                        <xsl:attribute name="class">
+                            <xsl:value-of select ="local-name($root/*)"/>
+                        </xsl:attribute>
                         <xsl:apply-templates select="." mode="toc-items" />
-                    </ul>
+                    </xsl:element>
                 </nav>
             </xsl:if>
             <div class="extras">
@@ -10794,12 +10797,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:for-each>
     <xsl:if test="$html-toc-expandlevel &lt; $toc-level">
         <script>
-            <xsl:text>var toc_toggler = document.getElementsByClassName("toc-caret");&#xa;</xsl:text>
-            <xsl:text>var i;&#xa;</xsl:text>
-            <xsl:text>for (i = 0; i &lt; toc_toggler.length; i++) {&#xa;</xsl:text>
+            <xsl:text>&#xa;</xsl:text>
+            <xsl:text>var toc_toggler = document.getElementsByClassName("toc-caret-cell");&#xa;</xsl:text>
+            <xsl:text>for (var i = 0; i &lt; toc_toggler.length; i++) {&#xa;</xsl:text>
             <xsl:text>toc_toggler[i].addEventListener("click", function() {&#xa;</xsl:text>
             <xsl:text>this.parentElement.parentElement.parentElement.querySelector(".toc-nested").classList.toggle("toc-nested-show");&#xa;</xsl:text>
-            <xsl:text>this.classList.toggle("toc-caret-expanded");&#xa;</xsl:text>
+            <xsl:text>var children = this.children;&#xa;</xsl:text>
+            <xsl:text>for (var j = 0; j &lt; children.length; j++) {&#xa;</xsl:text>
+            <xsl:text>children[j].classList.toggle("toc-caret-show");&#xa;</xsl:text>
+            <xsl:text>children[j].classList.toggle("toc-caret-hide");&#xa;</xsl:text>
+            <xsl:text>}&#xa;</xsl:text>
             <xsl:text>});&#xa;</xsl:text>
             <xsl:text>}&#xa;</xsl:text>
         </script>
@@ -10847,35 +10854,27 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:text> active</xsl:text>
             </xsl:if>
         </xsl:attribute>
-        <xsl:element name="div">
-            <xsl:attribute name="class">
-                <xsl:text>toc-line-table</xsl:text>
-            </xsl:attribute>
-            <xsl:element name="div">
-                <xsl:attribute name="class">
-                    <xsl:text>toc-line-row</xsl:text>
-                </xsl:attribute>
-                <xsl:choose>
-                    <xsl:when test="$on-a-leaf='false' and $toc-level &gt; $adjusted-depth and $html-toc-expandlevel &lt;= $adjusted-depth">
-                        <xsl:element name="div">
-                            <xsl:attribute name="class">
-                                <xsl:text>toc-caret-cell toc-caret</xsl:text>
-                                <xsl:if test="$in-this-subtree='true'">
-                                    <xsl:text> toc-caret-expanded</xsl:text>
-                                </xsl:if>
-                            </xsl:attribute>
-                            <xsl:text disable-output-escaping="yes"><![CDATA[&#x25b8;]]></xsl:text>
-                        </xsl:element>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:element name="div">
-                            <xsl:attribute name="class">
-                                <xsl:text>toc-caret-cell</xsl:text>
-                            </xsl:attribute>
+        <div class="toc-line-table">
+            <div class="toc-line-row">
+                <div class="toc-caret-cell">
+                    <xsl:choose>
+                        <xsl:when test="$on-a-leaf='false' and $toc-level &gt; $adjusted-depth and $html-toc-expandlevel &lt;= $adjusted-depth">
+                            <span class="toc-caret-show">
+                                <xsl:call-template name="toc-item-caret">
+                                    <xsl:with-param name="b-in-subtree" select="$in-this-subtree" />
+                                </xsl:call-template>
+                            </span>
+                            <span class="toc-caret-hide">
+                                <xsl:call-template name="toc-item-caret">
+                                    <xsl:with-param name="b-in-subtree" select="not($in-this-subtree)" />
+                                </xsl:call-template>
+                            </span>
+                        </xsl:when>
+                        <xsl:otherwise>
                             <xsl:text> </xsl:text>
-                        </xsl:element>
-                    </xsl:otherwise>
-                </xsl:choose>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </div>
                 <!-- From                                                                            -->
                 <!-- https://html.spec.whatwg.org/multipage/text-level-semantics.html#the-a-element  -->
                 <!-- "The a element can be wrapped around entire paragraphs, lists, tables, and so   -->
@@ -10888,10 +10887,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:attribute name="data-scroll">
                         <xsl:apply-templates select="." mode="html-id" />
                     </xsl:attribute>
-                    <xsl:element name="div">
-                        <xsl:attribute name="class">
-                            <xsl:text>toc-codenumber-cell</xsl:text>
-                        </xsl:attribute>
+                    <div class="toc-codenumber-cell">
                         <xsl:variable name="toc-item-codenum">
                             <!-- TODO will the test below work the way I want it to? -->
                             <xsl:for-each select="self::part|self::chapter|$root/article/*[count(.|self::section)=1]">
@@ -10911,16 +10907,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                                 <xsl:text> </xsl:text>
                             </xsl:otherwise>
                         </xsl:choose>
-                    </xsl:element>
-                    <xsl:element name="div">
-                        <xsl:attribute name="class">
-                            <xsl:text>toc-title-cell</xsl:text>
-                        </xsl:attribute>
+                    </div>
+                    <div class="toc-title-cell">
                         <xsl:apply-templates select="." mode="title-short" />
-                    </xsl:element>
+                    </div>
                 </xsl:element>
-            </xsl:element>
-        </xsl:element>
+            </div>
+        </div>
         <xsl:if test="$on-a-leaf='false' and $toc-level &gt; $adjusted-depth">
             <xsl:element name="ul">
                 <xsl:if test="$html-toc-expandlevel &lt;= $adjusted-depth">
@@ -10940,6 +10933,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:element>
         </xsl:if>
     </xsl:element>
+</xsl:template>
+
+<xsl:template name="toc-item-caret">
+    <xsl:param name = "b-in-subtree" />
+    <xsl:choose>
+        <xsl:when test="$b-in-subtree">
+            <!-- down arrow for expanded item -->
+            <xsl:text disable-output-escaping="yes"><![CDATA[&#x25be;]]></xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <!-- right arrow for non-expanded item -->
+            <xsl:text disable-output-escaping="yes"><![CDATA[&#x25b8;]]></xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!-- Feedback Button goes at the bottom (in "extras") -->
