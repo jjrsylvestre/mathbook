@@ -51,11 +51,11 @@
 }
 
 
-/* toc_default.css */
+/* spacing/formatting */
 
 #toc {
   /* IMPORTANT height must be calculated by javascript. */
-    /* width: 240px; */
+    width: 240px;
     margin: 0;
     font-size: 14.72px;
     overflow-y: auto;
@@ -68,54 +68,63 @@
     padding: 0px;
 }
 
-.toc-nested {
-    display: none;
+#toc .book :is(
+	.part,
+	.backmatter
+) {
+    margin-top: 1em;
 }
 
-.toc-nested-show {
-    display: block;
+#toc .book :is(
+	.references,
+	.index,
+	.backmatter .colophon
+) {
+    margin-top: 0.3em;
 }
 
-.toc-caret-hide {
-    display: none;
-}
-
-.toc-caret-show {
-    display: block;
-}
-
-#toc div.toc-line-table {
-    display: table;
-}
-
-#toc div.toc-line-row {
-    display: table-row;
-}
-
-#toc :is(div.toc-caret-cell,div.toc-codenumber-cell,div.toc-title-cell) {
-    display: table-cell;
-}
-
-#toc div.toc-codenumber-cell {
-    width: 2em;
-}
-
-#toc div.toc-caret-cell {
-    width: 1em;
-    cursor: pointer;
+#toc div.toc-line {
 	padding-left: 0.2em;
+	display: flex;
+	flex-wrap: nowrap;
 }
 
-#toc div.toc-caret-expanded {
-    vertical-align: bottom;
-    -ms-transform: rotate(90deg); /* IE 9 */
-    -webkit-transform: rotate(90deg); /* Safari */
-    transform: rotate(90deg);
+#toc div.toc-line > a {
+	flex-grow: 1;
+	display: flex;
 }
 
-#toc div.toc-codenumber-cell {
+#toc .toc-contains-nested > ul {
+    display: none;
+}
+
+#toc .toc-nested-shown > ul {
+    display: block;
+}
+
+#toc .toc-caret-hide {
+    display: none;
+}
+
+#toc .toc-caret-show {
+    display: block;
+}
+
+#toc span.codenumber {
+	min-width: 1.5em;
+	margin-right: 0.5em;
 	text-align: center;
-	padding-right: 0.2em;
+}
+
+#toc div.toc-caret {
+    width: 1em;
+	margin-left: 0.2em;
+	flex-grow: 0;
+	min-width: 1em;
+}
+
+#toc div.toc-caret :not(.toc-blank-caret) {
+    cursor: pointer;
 }
 
 #toc .book :is(
@@ -134,7 +143,8 @@
 	.frontmatter,
 	.part,
 	.backmatter
-) > div > div > a {
+) > div > a {
+
     font-size: 110%;
 }
 
@@ -152,14 +162,42 @@
 	text-decoration: none;
 }
 
+/* borders (see below for border colors) */
 
-/* setcolors.css */
+#toc div.toc-line {
+	border-top: 1px solid;
+}
+
+/* .backmatter .colophon is already matched by
+   the li:last-child in the second selector,
+   so no need for it in the third along with .index and .references */
+/* TODO NEED TO MATCH LAST APPENDIX */
+#toc .book li.frontmatter > div.toc-line,
+#toc .book li:last-child > div.toc-line,
+#toc .book li.last-appendix > div.toc-line,
+#toc .book li.toc-contains-nested.toc-nested-shown > div.toc-line,
+#toc .book :is(
+	.index,
+	.references,
+) {
+	border-bottom: 1px solid;
+}
+
+#toc .book li.toc-nested-shown > ul > li:first-child > div.toc-line {
+	border-top: none;
+}
+
+#toc .book .subsubsection div.toc-line {
+	border-top: none;
+}
+
+/* background colors */
 
 #toc .book :is(
 	.frontmatter,
 	.part,
 	.backmatter
-) {
+) > div.toc-line {
     background-color: var(--bodytitlehighlight);
 }
 
@@ -169,8 +207,7 @@
 	.index,
 	.references,
 	.backmatter .colophon
-) {
-	border-color: var(--tocborder);
+) > div.toc-line {
 	background-color: var(--chaptertoc);
 }
 
@@ -179,23 +216,64 @@
 	.colophon,
 	.biography,
 	.preface
-) {
+) > div.toc-line {
 	background-color: var(--sectiontoc);
 }
 
-#toc .book .subsection {
+#toc .book .subsection > div.toc-line {
 	background-color: var(--subsectiontoc);
 }
 
-#toc .book .subsubsection {
+#toc .book .subsubsection > div.toc-line {
 	background-color: var(--subsubsectiontoc);
 }
+
+#toc .book li.chapter.active > div.toc-line {
+	background-color: var(--chaptertocactive);
+}
+
+#toc .book li.section.active > div.toc-line {
+	background-color: var(--sectiontocactive);
+}
+
+#toc .book li.subsection.active > div.toc-line {
+	background-color: var(--subsectiontocactive);
+}
+
+#toc .book li.subsubsection.active > div.toc-line {
+	background-color: var(--subsubsectiontocactive);
+}
+
+/* not really sure why I need the :is() on here,
+   but without it, hovering over chapters doesn't work */
+#toc .book :is(
+	.frontmatter,
+	.part,
+	.backmatter,
+	.chapter,
+	.appendix,
+	.index,
+	.references,
+	.backmatter .colophon,
+	.section,
+	.frontmatter :is(
+		.colophon,
+		.biography,
+		.preface
+	),
+	.subsection,
+	.subsubsection
+) > div.toc-line:hover {
+    background-color: var(--highlighttoc);
+}
+
+/* text colors */
 
 #toc .book :is(
 	.frontmatter,
 	.part,
 	.backmatter
-) > div > div > :is(a,div) {
+) > div.toc-line > :is(a,a:link,a:visited,div) {
 	color: #222222;
 }
 
@@ -205,2165 +283,2129 @@
 	.index,
 	.references,
 	.backmatter .colophon
-) > div > div > :is(a,div) {
+) > div.toc-line  > :is(a,a:link,a:visited,div) {
 	color: var(--chaptertoctext);
 }
 
-#toc .book .section > div > div > :is(a,div),
+#toc .book .section > div.toc-line > :is(a,a:link,a:visited,div),
 #toc .book .frontmatter :is(
 	.colophon,
 	.biography,
 	.preface
-) > div > div > :is(a,div) {
+) > div.toc-line > :is(a,a:link,a:visited,div) {
 	color: var(--sectiontoctext);
 }
 
-#toc .book .subsection > div > div > :is(a,div) {
+#toc .book .subsection > div.toc-line > :is(a,a:link,a:visited,div) {
 	color: var(--subsectiontoctext);
 }
 
-#toc .book .subsubsection > div > div > :is(a,div) {
+#toc .book .subsubsection > div.toc-line > :is(a,a:link,a:visited,div) {
 	color: var(--subsubsectiontoctext);
 }
 
-</style></head>
+#toc .book li.chapter.active > div.toc-line > :is(a,a:link,a:visited,div) {
+	color: var(--chaptertoctextactive);
+}
+
+#toc .book li.section.active > div.toc-line > :is(a,a:link,a:visited,div) {
+	color: var(--sectiontoctextactive);
+}
+
+#toc .book li.subsection.active > div.toc-line > :is(a,a:link,a:visited,div) {
+	color: var(--subsectiontoctextactive);
+}
+
+#toc .book li.subsubsection.active > div.toc-line > :is(a,a:link,a:visited,div) {
+	color: var(--subsubsectiontoctextactive);
+}
+
+/* again, not really sure why I need the :is() on here,
+   but without it, hovering over certain things doesn't work */
+#toc .book :is(
+	.frontmatter,
+	.part,
+	.backmatter,
+	.chapter,
+	.appendix,
+	.index,
+	.references,
+	.backmatter .colophon,
+	.section,
+	.frontmatter :is(
+		.colophon,
+		.biography,
+		.preface
+	),
+	.subsection,
+	.subsubsection
+) > div.toc-line:hover > :is(a,a:link,a:visited,div) {
+	color: var(--highlighttoctext);
+}
+
+/* border colors */
+
+#toc .book div.toc-line {
+	border-color: var(--tocborder);
+}
+
+#toc .book :is(
+	.section,
+	.subsection,
+	.frontmatter .colophon,
+	.biography,
+	.preface
+) > div.toc-line {
+	border-color: #d1d1d1;
+}
+
+#toc .book div.toc-line:hover {
+	border-color: var(--highlighttocborder);
+}
+
+</head>
 
 <body>
 
 	<nav id="toc">
 		<ul class="book">
-			<li class="frontmatter link active">
-				<div class="toc-line-table">
-					<div class="toc-line-row">
-						<div class="toc-caret-cell">
-							<span class="toc-caret-show">&#x25b8;</span><span class="toc-caret-hide">&#x25be;</span>
-						</div>
-						<a href="frontmatter-1.html" data-scroll="frontmatter-1">
-							<div class="toc-codenumber-cell"> </div>
-							<div class="toc-title-cell">Front Matter</div>
-						</a>
+			<li class="frontmatter link toc-contains-nested">
+				<div class="toc-line">
+					<div class="toc-caret">
+						<span class="toc-caret-show">▸</span><span class="toc-caret-hide">▾</span>
 					</div>
+					<a data-scroll="frontmatter-1" href="frontmatter-1.html"><span class="codenumber"></span> <span
+							class="title">Front Matter</span></a>
 				</div>
-				<ul class="toc-nested">
+				<ul>
 					<li class="colophon link">
-						<div class="toc-line-table">
-							<div class="toc-line-row">
-								<div class="toc-caret-cell"> </div>
-								<a href="colophon-1.html" data-scroll="colophon-1">
-									<div class="toc-codenumber-cell"> </div>
-									<div class="toc-title-cell">Colophon</div>
-								</a>
-							</div>
+						<div class="toc-line">
+							<div class="toc-caret toc-blank-caret"></div>
+							<a data-scroll="colophon-1" href="colophon-1.html"><span class="codenumber"></span> <span
+									class="title">Colophon</span></a>
 						</div>
 					</li>
 					<li class="biography link">
-						<div class="toc-line-table">
-							<div class="toc-line-row">
-								<div class="toc-caret-cell"> </div>
-								<a href="author-bio-JS.html" data-scroll="author-bio-JS">
-									<div class="toc-codenumber-cell"> </div>
-									<div class="toc-title-cell">Author Biography</div>
-								</a>
-							</div>
+						<div class="toc-line">
+							<div class="toc-caret toc-blank-caret"></div>
+							<a data-scroll="author-bio-JS" href="author-bio-JS.html"><span class="codenumber"></span> <span
+									class="title">Author Biography</span></a>
 						</div>
 					</li>
 					<li class="preface link">
-						<div class="toc-line-table">
-							<div class="toc-line-row">
-								<div class="toc-caret-cell"> </div>
-								<a href="preface-1.html" data-scroll="preface-1">
-									<div class="toc-codenumber-cell"> </div>
-									<div class="toc-title-cell">Preface</div>
-								</a>
-							</div>
+						<div class="toc-line">
+							<div class="toc-caret toc-blank-caret"></div>
+							<a data-scroll="preface-1" href="preface-1.html"><span class="codenumber"></span> <span
+									class="title">Preface</span></a>
 						</div>
 					</li>
 				</ul>
 			</li>
-			<li class="part link">
-				<div class="toc-line-table">
-					<div class="toc-line-row">
-						<div class="toc-caret-cell"> </div>
-						<a href="part-1.html" data-scroll="part-1">
-							<div class="toc-codenumber-cell">I</div>
-							<div class="toc-title-cell">A part</div>
-						</a>
-					</div>
+			<li class="part link toc-contains-nested toc-nested-shown">
+				<div class="toc-line">
+					<div class="toc-caret toc-blank-caret"></div>
+					<a data-scroll="part-1" href="part-1.html"><span class="codenumber">I</span> <span class="title">A
+							part</span></a>
 				</div>
 				<ul>
-					<li class="chapter link">
-						<div class="toc-line-table">
-							<div class="toc-line-row">
-								<div class="toc-caret-cell">
-									<span class="toc-caret-show">&#x25b8;</span><span class="toc-caret-hide">&#x25be;</span>
-								</div>
-								<a href="chapter-1.html" data-scroll="chapter-1">
-									<div class="toc-codenumber-cell">1</div>
-									<div class="toc-title-cell">A chapter</div>
-								</a>
+					<li class="chapter link toc-contains-nested toc-nested-shown">
+						<div class="toc-line">
+							<div class="toc-caret">
+								<span class="toc-caret-show">▾</span><span class="toc-caret-hide">▸</span>
 							</div>
+							<a data-scroll="chapter-1" href="chapter-1.html"><span class="codenumber">1</span> <span
+									class="title">A chapter</span></a>
 						</div>
-						<ul class="toc-nested">
-							<li class="section link">
-								<div class="toc-line-table">
-									<div class="toc-line-row">
-										<div class="toc-caret-cell">
-											<span class="toc-caret-show">&#x25b8;</span><span
-												class="toc-caret-hide">&#x25be;</span>
-										</div>
-										<a href="section-1.html" data-scroll="section-1">
-											<div class="toc-codenumber-cell"> </div>
-											<div class="toc-title-cell">A section</div>
-										</a>
+						<ul>
+							<li class="section link toc-contains-nested">
+								<div class="toc-line">
+									<div class="toc-caret">
+										<span class="toc-caret-show">▸</span><span class="toc-caret-hide">▾</span>
 									</div>
+									<a data-scroll="section-1" href="section-1.html"><span class="codenumber"></span> <span
+											class="title">A section</span></a>
 								</div>
-								<ul class="toc-nested">
-									<li class="subsection link">
-										<div class="toc-line-table">
-											<div class="toc-line-row">
-												<div class="toc-caret-cell">
-													<span class="toc-caret-show">&#x25b8;</span><span
-														class="toc-caret-hide">&#x25be;</span>
-												</div>
-												<a href="section-1.html#subsection-1" data-scroll="subsection-1">
-													<div class="toc-codenumber-cell"> </div>
-													<div class="toc-title-cell">A subsection</div>
-												</a>
+								<ul>
+									<li class="subsection link toc-contains-nested">
+										<div class="toc-line">
+											<div class="toc-caret">
+												<span class="toc-caret-show">▸</span><span class="toc-caret-hide">▾</span>
 											</div>
+											<a data-scroll="subsection-1" href="section-1.html#subsection-1"><span
+													class="codenumber"></span> <span class="title">A subsection</span></a>
 										</div>
-										<ul class="toc-nested">
+										<ul>
 											<li class="subsubsection link">
-												<div class="toc-line-table">
-													<div class="toc-line-row">
-														<div class="toc-caret-cell"> </div>
-														<a href="section-1.html#subsubsection-1"
-															data-scroll="subsubsection-1">
-															<div class="toc-codenumber-cell"> </div>
-															<div class="toc-title-cell">A subsubsection</div>
-														</a>
-													</div>
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-1"
+														href="section-1.html#subsubsection-1"><span
+															class="codenumber"></span> <span class="title">A
+															subsubsection</span></a>
 												</div>
 											</li>
 											<li class="subsubsection link">
-												<div class="toc-line-table">
-													<div class="toc-line-row">
-														<div class="toc-caret-cell"> </div>
-														<a href="section-1.html#subsubsection-2"
-															data-scroll="subsubsection-2">
-															<div class="toc-codenumber-cell"> </div>
-															<div class="toc-title-cell">Another subsubsection</div>
-														</a>
-													</div>
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-2"
+														href="section-1.html#subsubsection-2"><span
+															class="codenumber"></span> <span class="title">Another
+															subsubsection</span></a>
 												</div>
 											</li>
 											<li class="subsubsection link">
-												<div class="toc-line-table">
-													<div class="toc-line-row">
-														<div class="toc-caret-cell"> </div>
-														<a href="section-1.html#subsubsection-3"
-															data-scroll="subsubsection-3">
-															<div class="toc-codenumber-cell"> </div>
-															<div class="toc-title-cell">Yet another subsubsection</div>
-														</a>
-													</div>
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-3"
+														href="section-1.html#subsubsection-3"><span
+															class="codenumber"></span> <span class="title">Yet another
+															subsubsection</span></a>
 												</div>
 											</li>
 										</ul>
 									</li>
-									<li class="subsection link">
-										<div class="toc-line-table">
-											<div class="toc-line-row">
-												<div class="toc-caret-cell">
-													<span class="toc-caret-show">&#x25b8;</span><span
-														class="toc-caret-hide">&#x25be;</span>
-												</div>
-												<a href="section-1.html#subsection-2" data-scroll="subsection-2">
-													<div class="toc-codenumber-cell"> </div>
-													<div class="toc-title-cell">Another subsection</div>
-												</a>
+									<li class="subsection link toc-contains-nested">
+										<div class="toc-line">
+											<div class="toc-caret">
+												<span class="toc-caret-show">▸</span><span class="toc-caret-hide">▾</span>
 											</div>
+											<a data-scroll="subsection-2" href="section-1.html#subsection-2"><span
+													class="codenumber"></span> <span class="title">Another
+													subsection</span></a>
 										</div>
-										<ul class="toc-nested">
+										<ul>
 											<li class="subsubsection link">
-												<div class="toc-line-table">
-													<div class="toc-line-row">
-														<div class="toc-caret-cell"> </div>
-														<a href="section-1.html#subsubsection-4"
-															data-scroll="subsubsection-4">
-															<div class="toc-codenumber-cell"> </div>
-															<div class="toc-title-cell">A subsubsection</div>
-														</a>
-													</div>
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-4"
+														href="section-1.html#subsubsection-4"><span
+															class="codenumber"></span> <span class="title">A
+															subsubsection</span></a>
 												</div>
 											</li>
 											<li class="subsubsection link">
-												<div class="toc-line-table">
-													<div class="toc-line-row">
-														<div class="toc-caret-cell"> </div>
-														<a href="section-1.html#subsubsection-5"
-															data-scroll="subsubsection-5">
-															<div class="toc-codenumber-cell"> </div>
-															<div class="toc-title-cell">Another subsubsection</div>
-														</a>
-													</div>
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-5"
+														href="section-1.html#subsubsection-5"><span
+															class="codenumber"></span> <span class="title">Another
+															subsubsection</span></a>
 												</div>
 											</li>
 											<li class="subsubsection link">
-												<div class="toc-line-table">
-													<div class="toc-line-row">
-														<div class="toc-caret-cell"> </div>
-														<a href="section-1.html#subsubsection-6"
-															data-scroll="subsubsection-6">
-															<div class="toc-codenumber-cell"> </div>
-															<div class="toc-title-cell">Yet another subsubsection</div>
-														</a>
-													</div>
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-6"
+														href="section-1.html#subsubsection-6"><span
+															class="codenumber"></span> <span class="title">Yet another
+															subsubsection</span></a>
 												</div>
 											</li>
 										</ul>
 									</li>
-									<li class="subsection link">
-										<div class="toc-line-table">
-											<div class="toc-line-row">
-												<div class="toc-caret-cell">
-													<span class="toc-caret-show">&#x25b8;</span><span
-														class="toc-caret-hide">&#x25be;</span>
-												</div>
-												<a href="section-1.html#subsection-3" data-scroll="subsection-3">
-													<div class="toc-codenumber-cell"> </div>
-													<div class="toc-title-cell">Yet another subsection</div>
-												</a>
+									<li class="subsection link toc-contains-nested">
+										<div class="toc-line">
+											<div class="toc-caret">
+												<span class="toc-caret-show">▸</span><span class="toc-caret-hide">▾</span>
 											</div>
+											<a data-scroll="subsection-3" href="section-1.html#subsection-3"><span
+													class="codenumber"></span> <span class="title">Yet another
+													subsection</span></a>
 										</div>
-										<ul class="toc-nested">
+										<ul>
 											<li class="subsubsection link">
-												<div class="toc-line-table">
-													<div class="toc-line-row">
-														<div class="toc-caret-cell"> </div>
-														<a href="section-1.html#subsubsection-7"
-															data-scroll="subsubsection-7">
-															<div class="toc-codenumber-cell"> </div>
-															<div class="toc-title-cell">A subsubsection</div>
-														</a>
-													</div>
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-7"
+														href="section-1.html#subsubsection-7"><span
+															class="codenumber"></span> <span class="title">A
+															subsubsection</span></a>
 												</div>
 											</li>
 											<li class="subsubsection link">
-												<div class="toc-line-table">
-													<div class="toc-line-row">
-														<div class="toc-caret-cell"> </div>
-														<a href="section-1.html#subsubsection-8"
-															data-scroll="subsubsection-8">
-															<div class="toc-codenumber-cell"> </div>
-															<div class="toc-title-cell">Another subsubsection</div>
-														</a>
-													</div>
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-8"
+														href="section-1.html#subsubsection-8"><span
+															class="codenumber"></span> <span class="title">Another
+															subsubsection</span></a>
 												</div>
 											</li>
 											<li class="subsubsection link">
-												<div class="toc-line-table">
-													<div class="toc-line-row">
-														<div class="toc-caret-cell"> </div>
-														<a href="section-1.html#subsubsection-9"
-															data-scroll="subsubsection-9">
-															<div class="toc-codenumber-cell"> </div>
-															<div class="toc-title-cell">Yet another subsubsection</div>
-														</a>
-													</div>
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-9"
+														href="section-1.html#subsubsection-9"><span
+															class="codenumber"></span> <span class="title">Yet another
+															subsubsection</span></a>
 												</div>
 											</li>
 										</ul>
 									</li>
 								</ul>
 							</li>
-							<li class="section link">
-								<div class="toc-line-table">
-									<div class="toc-line-row">
-										<div class="toc-caret-cell">
-											<span class="toc-caret-show">&#x25b8;</span><span
-												class="toc-caret-hide">&#x25be;</span>
-										</div>
-										<a href="section-2.html" data-scroll="section-2">
-											<div class="toc-codenumber-cell"> </div>
-											<div class="toc-title-cell">Another section</div>
-										</a>
+							<li class="section link active toc-contains-nested">
+								<div class="toc-line">
+									<div class="toc-caret">
+										<span class="toc-caret-show">▸</span><span class="toc-caret-hide">▾</span>
 									</div>
+									<a data-scroll="section-2" href="section-2.html"><span class="codenumber"></span> <span
+											class="title">Another section</span></a>
 								</div>
-								<ul class="toc-nested">
-									<li class="subsection link">
-										<div class="toc-line-table">
-											<div class="toc-line-row">
-												<div class="toc-caret-cell">
-													<span class="toc-caret-show">&#x25b8;</span><span
-														class="toc-caret-hide">&#x25be;</span>
-												</div>
-												<a href="section-2.html#subsection-4" data-scroll="subsection-4">
-													<div class="toc-codenumber-cell"> </div>
-													<div class="toc-title-cell">A subsection</div>
-												</a>
+								<ul>
+									<li class="subsection link toc-contains-nested">
+										<div class="toc-line">
+											<div class="toc-caret">
+												<span class="toc-caret-show">▸</span><span class="toc-caret-hide">▾</span>
 											</div>
+											<a data-scroll="subsection-4" href="section-2.html#subsection-4"><span
+													class="codenumber"></span> <span class="title">A subsection</span></a>
 										</div>
-										<ul class="toc-nested">
+										<ul>
 											<li class="subsubsection link">
-												<div class="toc-line-table">
-													<div class="toc-line-row">
-														<div class="toc-caret-cell"> </div>
-														<a href="section-2.html#subsubsection-10"
-															data-scroll="subsubsection-10">
-															<div class="toc-codenumber-cell"> </div>
-															<div class="toc-title-cell">A subsubsection</div>
-														</a>
-													</div>
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-10"
+														href="section-2.html#subsubsection-10"><span
+															class="codenumber"></span> <span class="title">A
+															subsubsection</span></a>
 												</div>
 											</li>
 											<li class="subsubsection link">
-												<div class="toc-line-table">
-													<div class="toc-line-row">
-														<div class="toc-caret-cell"> </div>
-														<a href="section-2.html#subsubsection-11"
-															data-scroll="subsubsection-11">
-															<div class="toc-codenumber-cell"> </div>
-															<div class="toc-title-cell">Another subsubsection</div>
-														</a>
-													</div>
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-11"
+														href="section-2.html#subsubsection-11"><span
+															class="codenumber"></span> <span class="title">Another
+															subsubsection</span></a>
 												</div>
 											</li>
 											<li class="subsubsection link">
-												<div class="toc-line-table">
-													<div class="toc-line-row">
-														<div class="toc-caret-cell"> </div>
-														<a href="section-2.html#subsubsection-12"
-															data-scroll="subsubsection-12">
-															<div class="toc-codenumber-cell"> </div>
-															<div class="toc-title-cell">Yet another subsubsection</div>
-														</a>
-													</div>
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-12"
+														href="section-2.html#subsubsection-12"><span
+															class="codenumber"></span> <span class="title">Yet another
+															subsubsection</span></a>
+												</div>
+											</li>
+										</ul>
+									</li>
+									<li class="subsection link toc-contains-nested">
+										<div class="toc-line">
+											<div class="toc-caret">
+												<span class="toc-caret-show">▸</span><span class="toc-caret-hide">▾</span>
+											</div>
+											<a data-scroll="subsection-5" href="section-2.html#subsection-5"><span
+													class="codenumber"></span> <span class="title">Another
+													subsection</span></a>
+										</div>
+										<ul>
+											<li class="subsubsection link">
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-13"
+														href="section-2.html#subsubsection-13"><span
+															class="codenumber"></span> <span class="title">A
+															subsubsection</span></a>
+												</div>
+											</li>
+											<li class="subsubsection link">
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-14"
+														href="section-2.html#subsubsection-14"><span
+															class="codenumber"></span> <span class="title">Another
+															subsubsection</span></a>
+												</div>
+											</li>
+											<li class="subsubsection link">
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-15"
+														href="section-2.html#subsubsection-15"><span
+															class="codenumber"></span> <span class="title">Yet another
+															subsubsection</span></a>
 												</div>
 											</li>
 										</ul>
 									</li>
 									<li class="subsection link">
-										<div class="toc-line-table">
-											<div class="toc-line-row">
-												<div class="toc-caret-cell">
-													<span class="toc-caret-show">&#x25b8;</span><span
-														class="toc-caret-hide">&#x25be;</span>
-												</div>
-												<a href="section-2.html#subsection-5" data-scroll="subsection-5">
-													<div class="toc-codenumber-cell"> </div>
-													<div class="toc-title-cell">Another subsection</div>
-												</a>
-											</div>
-										</div>
-										<ul class="toc-nested">
-											<li class="subsubsection link">
-												<div class="toc-line-table">
-													<div class="toc-line-row">
-														<div class="toc-caret-cell"> </div>
-														<a href="section-2.html#subsubsection-13"
-															data-scroll="subsubsection-13">
-															<div class="toc-codenumber-cell"> </div>
-															<div class="toc-title-cell">A subsubsection</div>
-														</a>
-													</div>
-												</div>
-											</li>
-											<li class="subsubsection link">
-												<div class="toc-line-table">
-													<div class="toc-line-row">
-														<div class="toc-caret-cell"> </div>
-														<a href="section-2.html#subsubsection-14"
-															data-scroll="subsubsection-14">
-															<div class="toc-codenumber-cell"> </div>
-															<div class="toc-title-cell">Another subsubsection</div>
-														</a>
-													</div>
-												</div>
-											</li>
-											<li class="subsubsection link">
-												<div class="toc-line-table">
-													<div class="toc-line-row">
-														<div class="toc-caret-cell"> </div>
-														<a href="section-2.html#subsubsection-15"
-															data-scroll="subsubsection-15">
-															<div class="toc-codenumber-cell"> </div>
-															<div class="toc-title-cell">Yet another subsubsection</div>
-														</a>
-													</div>
-												</div>
-											</li>
-										</ul>
-									</li>
-									<li class="subsection link">
-										<div class="toc-line-table">
-											<div class="toc-line-row">
-												<div class="toc-caret-cell"> </div>
-												<a href="section-2.html#subsection-6" data-scroll="subsection-6">
-													<div class="toc-codenumber-cell"> </div>
-													<div class="toc-title-cell">A subsection with no subsubsections</div>
-												</a>
-											</div>
+										<div class="toc-line">
+											<div class="toc-caret toc-blank-caret"></div>
+											<a data-scroll="subsection-6" href="section-2.html#subsection-6"><span
+													class="codenumber"></span> <span class="title">A subsection with no
+													subsubsections</span></a>
 										</div>
 									</li>
 								</ul>
 							</li>
 							<li class="section link">
-								<div class="toc-line-table">
-									<div class="toc-line-row">
-										<div class="toc-caret-cell"> </div>
-										<a href="section-3.html" data-scroll="section-3">
-											<div class="toc-codenumber-cell"> </div>
-											<div class="toc-title-cell">A section with no subsections</div>
-										</a>
+								<div class="toc-line">
+									<div class="toc-caret toc-blank-caret"></div>
+									<a data-scroll="section-3" href="section-3.html"><span class="codenumber"></span> <span
+											class="title">A section with no subsections</span></a>
+								</div>
+							</li>
+						</ul>
+					</li>
+					<li class="chapter link toc-contains-nested">
+						<div class="toc-line">
+							<div class="toc-caret">
+								<span class="toc-caret-show">▸</span><span class="toc-caret-hide">▾</span>
+							</div>
+							<a data-scroll="chapter-2" href="chapter-2.html"><span class="codenumber">2</span> <span
+									class="title">A repeat chapter</span></a>
+						</div>
+						<ul>
+							<li class="section link toc-contains-nested">
+								<div class="toc-line">
+									<div class="toc-caret">
+										<span class="toc-caret-show">▸</span><span class="toc-caret-hide">▾</span>
 									</div>
+									<a data-scroll="section-4" href="section-4.html"><span class="codenumber"></span> <span
+											class="title">A section</span></a>
+								</div>
+								<ul>
+									<li class="subsection link toc-contains-nested">
+										<div class="toc-line">
+											<div class="toc-caret">
+												<span class="toc-caret-show">▸</span><span class="toc-caret-hide">▾</span>
+											</div>
+											<a data-scroll="subsection-7" href="section-4.html#subsection-7"><span
+													class="codenumber"></span> <span class="title">A subsection</span></a>
+										</div>
+										<ul>
+											<li class="subsubsection link">
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-16"
+														href="section-4.html#subsubsection-16"><span
+															class="codenumber"></span> <span class="title">A
+															subsubsection</span></a>
+												</div>
+											</li>
+											<li class="subsubsection link">
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-17"
+														href="section-4.html#subsubsection-17"><span
+															class="codenumber"></span> <span class="title">Another
+															subsubsection</span></a>
+												</div>
+											</li>
+											<li class="subsubsection link">
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-18"
+														href="section-4.html#subsubsection-18"><span
+															class="codenumber"></span> <span class="title">Yet another
+															subsubsection</span></a>
+												</div>
+											</li>
+										</ul>
+									</li>
+									<li class="subsection link toc-contains-nested">
+										<div class="toc-line">
+											<div class="toc-caret">
+												<span class="toc-caret-show">▸</span><span class="toc-caret-hide">▾</span>
+											</div>
+											<a data-scroll="subsection-8" href="section-4.html#subsection-8"><span
+													class="codenumber"></span> <span class="title">Another
+													subsection</span></a>
+										</div>
+										<ul>
+											<li class="subsubsection link">
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-19"
+														href="section-4.html#subsubsection-19"><span
+															class="codenumber"></span> <span class="title">A
+															subsubsection</span></a>
+												</div>
+											</li>
+											<li class="subsubsection link">
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-20"
+														href="section-4.html#subsubsection-20"><span
+															class="codenumber"></span> <span class="title">Another
+															subsubsection</span></a>
+												</div>
+											</li>
+											<li class="subsubsection link">
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-21"
+														href="section-4.html#subsubsection-21"><span
+															class="codenumber"></span> <span class="title">Yet another
+															subsubsection</span></a>
+												</div>
+											</li>
+										</ul>
+									</li>
+									<li class="subsection link toc-contains-nested">
+										<div class="toc-line">
+											<div class="toc-caret">
+												<span class="toc-caret-show">▸</span><span class="toc-caret-hide">▾</span>
+											</div>
+											<a data-scroll="subsection-9" href="section-4.html#subsection-9"><span
+													class="codenumber"></span> <span class="title">Yet another
+													subsection</span></a>
+										</div>
+										<ul>
+											<li class="subsubsection link">
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-22"
+														href="section-4.html#subsubsection-22"><span
+															class="codenumber"></span> <span class="title">A
+															subsubsection</span></a>
+												</div>
+											</li>
+											<li class="subsubsection link">
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-23"
+														href="section-4.html#subsubsection-23"><span
+															class="codenumber"></span> <span class="title">Another
+															subsubsection</span></a>
+												</div>
+											</li>
+											<li class="subsubsection link">
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-24"
+														href="section-4.html#subsubsection-24"><span
+															class="codenumber"></span> <span class="title">Yet another
+															subsubsection</span></a>
+												</div>
+											</li>
+										</ul>
+									</li>
+								</ul>
+							</li>
+							<li class="section link toc-contains-nested">
+								<div class="toc-line">
+									<div class="toc-caret">
+										<span class="toc-caret-show">▸</span><span class="toc-caret-hide">▾</span>
+									</div>
+									<a data-scroll="section-5" href="section-5.html"><span class="codenumber"></span> <span
+											class="title">Another section</span></a>
+								</div>
+								<ul>
+									<li class="subsection link toc-contains-nested">
+										<div class="toc-line">
+											<div class="toc-caret">
+												<span class="toc-caret-show">▸</span><span class="toc-caret-hide">▾</span>
+											</div>
+											<a data-scroll="subsection-10" href="section-5.html#subsection-10"><span
+													class="codenumber"></span> <span class="title">A subsection</span></a>
+										</div>
+										<ul>
+											<li class="subsubsection link">
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-25"
+														href="section-5.html#subsubsection-25"><span
+															class="codenumber"></span> <span class="title">A
+															subsubsection</span></a>
+												</div>
+											</li>
+											<li class="subsubsection link">
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-26"
+														href="section-5.html#subsubsection-26"><span
+															class="codenumber"></span> <span class="title">Another
+															subsubsection</span></a>
+												</div>
+											</li>
+											<li class="subsubsection link">
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-27"
+														href="section-5.html#subsubsection-27"><span
+															class="codenumber"></span> <span class="title">Yet another
+															subsubsection</span></a>
+												</div>
+											</li>
+										</ul>
+									</li>
+									<li class="subsection link toc-contains-nested">
+										<div class="toc-line">
+											<div class="toc-caret">
+												<span class="toc-caret-show">▸</span><span class="toc-caret-hide">▾</span>
+											</div>
+											<a data-scroll="subsection-11" href="section-5.html#subsection-11"><span
+													class="codenumber"></span> <span class="title">Another
+													subsection</span></a>
+										</div>
+										<ul>
+											<li class="subsubsection link">
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-28"
+														href="section-5.html#subsubsection-28"><span
+															class="codenumber"></span> <span class="title">A
+															subsubsection</span></a>
+												</div>
+											</li>
+											<li class="subsubsection link">
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-29"
+														href="section-5.html#subsubsection-29"><span
+															class="codenumber"></span> <span class="title">Another
+															subsubsection</span></a>
+												</div>
+											</li>
+											<li class="subsubsection link">
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-30"
+														href="section-5.html#subsubsection-30"><span
+															class="codenumber"></span> <span class="title">Yet another
+															subsubsection</span></a>
+												</div>
+											</li>
+										</ul>
+									</li>
+									<li class="subsection link">
+										<div class="toc-line">
+											<div class="toc-caret toc-blank-caret"></div>
+											<a data-scroll="subsection-12" href="section-5.html#subsection-12"><span
+													class="codenumber"></span> <span class="title">A subsection with no
+													subsubsections</span></a>
+										</div>
+									</li>
+								</ul>
+							</li>
+							<li class="section link">
+								<div class="toc-line">
+									<div class="toc-caret toc-blank-caret"></div>
+									<a data-scroll="section-6" href="section-6.html"><span class="codenumber"></span> <span
+											class="title">A section with no subsections</span></a>
 								</div>
 							</li>
 						</ul>
 					</li>
 					<li class="chapter link">
-						<div class="toc-line-table">
-							<div class="toc-line-row">
-								<div class="toc-caret-cell">
-									<span class="toc-caret-show">&#x25b8;</span><span class="toc-caret-hide">&#x25be;</span>
-								</div>
-								<a href="chapter-2.html" data-scroll="chapter-2">
-									<div class="toc-codenumber-cell">2</div>
-									<div class="toc-title-cell">A repeat chapter</div>
-								</a>
-							</div>
-						</div>
-						<ul class="toc-nested">
-							<li class="section link">
-								<div class="toc-line-table">
-									<div class="toc-line-row">
-										<div class="toc-caret-cell">
-											<span class="toc-caret-show">&#x25b8;</span><span
-												class="toc-caret-hide">&#x25be;</span>
-										</div>
-										<a href="section-4.html" data-scroll="section-4">
-											<div class="toc-codenumber-cell"> </div>
-											<div class="toc-title-cell">A section</div>
-										</a>
-									</div>
-								</div>
-								<ul class="toc-nested">
-									<li class="subsection link">
-										<div class="toc-line-table">
-											<div class="toc-line-row">
-												<div class="toc-caret-cell">
-													<span class="toc-caret-show">&#x25b8;</span><span
-														class="toc-caret-hide">&#x25be;</span>
-												</div>
-												<a href="section-4.html#subsection-7" data-scroll="subsection-7">
-													<div class="toc-codenumber-cell"> </div>
-													<div class="toc-title-cell">A subsection</div>
-												</a>
-											</div>
-										</div>
-										<ul class="toc-nested">
-											<li class="subsubsection link">
-												<div class="toc-line-table">
-													<div class="toc-line-row">
-														<div class="toc-caret-cell"> </div>
-														<a href="section-4.html#subsubsection-16"
-															data-scroll="subsubsection-16">
-															<div class="toc-codenumber-cell"> </div>
-															<div class="toc-title-cell">A subsubsection</div>
-														</a>
-													</div>
-												</div>
-											</li>
-											<li class="subsubsection link">
-												<div class="toc-line-table">
-													<div class="toc-line-row">
-														<div class="toc-caret-cell"> </div>
-														<a href="section-4.html#subsubsection-17"
-															data-scroll="subsubsection-17">
-															<div class="toc-codenumber-cell"> </div>
-															<div class="toc-title-cell">Another subsubsection</div>
-														</a>
-													</div>
-												</div>
-											</li>
-											<li class="subsubsection link">
-												<div class="toc-line-table">
-													<div class="toc-line-row">
-														<div class="toc-caret-cell"> </div>
-														<a href="section-4.html#subsubsection-18"
-															data-scroll="subsubsection-18">
-															<div class="toc-codenumber-cell"> </div>
-															<div class="toc-title-cell">Yet another subsubsection</div>
-														</a>
-													</div>
-												</div>
-											</li>
-										</ul>
-									</li>
-									<li class="subsection link">
-										<div class="toc-line-table">
-											<div class="toc-line-row">
-												<div class="toc-caret-cell">
-													<span class="toc-caret-show">&#x25b8;</span><span
-														class="toc-caret-hide">&#x25be;</span>
-												</div>
-												<a href="section-4.html#subsection-8" data-scroll="subsection-8">
-													<div class="toc-codenumber-cell"> </div>
-													<div class="toc-title-cell">Another subsection</div>
-												</a>
-											</div>
-										</div>
-										<ul class="toc-nested">
-											<li class="subsubsection link">
-												<div class="toc-line-table">
-													<div class="toc-line-row">
-														<div class="toc-caret-cell"> </div>
-														<a href="section-4.html#subsubsection-19"
-															data-scroll="subsubsection-19">
-															<div class="toc-codenumber-cell"> </div>
-															<div class="toc-title-cell">A subsubsection</div>
-														</a>
-													</div>
-												</div>
-											</li>
-											<li class="subsubsection link">
-												<div class="toc-line-table">
-													<div class="toc-line-row">
-														<div class="toc-caret-cell"> </div>
-														<a href="section-4.html#subsubsection-20"
-															data-scroll="subsubsection-20">
-															<div class="toc-codenumber-cell"> </div>
-															<div class="toc-title-cell">Another subsubsection</div>
-														</a>
-													</div>
-												</div>
-											</li>
-											<li class="subsubsection link">
-												<div class="toc-line-table">
-													<div class="toc-line-row">
-														<div class="toc-caret-cell"> </div>
-														<a href="section-4.html#subsubsection-21"
-															data-scroll="subsubsection-21">
-															<div class="toc-codenumber-cell"> </div>
-															<div class="toc-title-cell">Yet another subsubsection</div>
-														</a>
-													</div>
-												</div>
-											</li>
-										</ul>
-									</li>
-									<li class="subsection link">
-										<div class="toc-line-table">
-											<div class="toc-line-row">
-												<div class="toc-caret-cell">
-													<span class="toc-caret-show">&#x25b8;</span><span
-														class="toc-caret-hide">&#x25be;</span>
-												</div>
-												<a href="section-4.html#subsection-9" data-scroll="subsection-9">
-													<div class="toc-codenumber-cell"> </div>
-													<div class="toc-title-cell">Yet another subsection</div>
-												</a>
-											</div>
-										</div>
-										<ul class="toc-nested">
-											<li class="subsubsection link">
-												<div class="toc-line-table">
-													<div class="toc-line-row">
-														<div class="toc-caret-cell"> </div>
-														<a href="section-4.html#subsubsection-22"
-															data-scroll="subsubsection-22">
-															<div class="toc-codenumber-cell"> </div>
-															<div class="toc-title-cell">A subsubsection</div>
-														</a>
-													</div>
-												</div>
-											</li>
-											<li class="subsubsection link">
-												<div class="toc-line-table">
-													<div class="toc-line-row">
-														<div class="toc-caret-cell"> </div>
-														<a href="section-4.html#subsubsection-23"
-															data-scroll="subsubsection-23">
-															<div class="toc-codenumber-cell"> </div>
-															<div class="toc-title-cell">Another subsubsection</div>
-														</a>
-													</div>
-												</div>
-											</li>
-											<li class="subsubsection link">
-												<div class="toc-line-table">
-													<div class="toc-line-row">
-														<div class="toc-caret-cell"> </div>
-														<a href="section-4.html#subsubsection-24"
-															data-scroll="subsubsection-24">
-															<div class="toc-codenumber-cell"> </div>
-															<div class="toc-title-cell">Yet another subsubsection</div>
-														</a>
-													</div>
-												</div>
-											</li>
-										</ul>
-									</li>
-								</ul>
-							</li>
-							<li class="section link">
-								<div class="toc-line-table">
-									<div class="toc-line-row">
-										<div class="toc-caret-cell">
-											<span class="toc-caret-show">&#x25b8;</span><span
-												class="toc-caret-hide">&#x25be;</span>
-										</div>
-										<a href="section-5.html" data-scroll="section-5">
-											<div class="toc-codenumber-cell"> </div>
-											<div class="toc-title-cell">Another section</div>
-										</a>
-									</div>
-								</div>
-								<ul class="toc-nested">
-									<li class="subsection link">
-										<div class="toc-line-table">
-											<div class="toc-line-row">
-												<div class="toc-caret-cell">
-													<span class="toc-caret-show">&#x25b8;</span><span
-														class="toc-caret-hide">&#x25be;</span>
-												</div>
-												<a href="section-5.html#subsection-10" data-scroll="subsection-10">
-													<div class="toc-codenumber-cell"> </div>
-													<div class="toc-title-cell">A subsection</div>
-												</a>
-											</div>
-										</div>
-										<ul class="toc-nested">
-											<li class="subsubsection link">
-												<div class="toc-line-table">
-													<div class="toc-line-row">
-														<div class="toc-caret-cell"> </div>
-														<a href="section-5.html#subsubsection-25"
-															data-scroll="subsubsection-25">
-															<div class="toc-codenumber-cell"> </div>
-															<div class="toc-title-cell">A subsubsection</div>
-														</a>
-													</div>
-												</div>
-											</li>
-											<li class="subsubsection link">
-												<div class="toc-line-table">
-													<div class="toc-line-row">
-														<div class="toc-caret-cell"> </div>
-														<a href="section-5.html#subsubsection-26"
-															data-scroll="subsubsection-26">
-															<div class="toc-codenumber-cell"> </div>
-															<div class="toc-title-cell">Another subsubsection</div>
-														</a>
-													</div>
-												</div>
-											</li>
-											<li class="subsubsection link">
-												<div class="toc-line-table">
-													<div class="toc-line-row">
-														<div class="toc-caret-cell"> </div>
-														<a href="section-5.html#subsubsection-27"
-															data-scroll="subsubsection-27">
-															<div class="toc-codenumber-cell"> </div>
-															<div class="toc-title-cell">Yet another subsubsection</div>
-														</a>
-													</div>
-												</div>
-											</li>
-										</ul>
-									</li>
-									<li class="subsection link">
-										<div class="toc-line-table">
-											<div class="toc-line-row">
-												<div class="toc-caret-cell">
-													<span class="toc-caret-show">&#x25b8;</span><span
-														class="toc-caret-hide">&#x25be;</span>
-												</div>
-												<a href="section-5.html#subsection-11" data-scroll="subsection-11">
-													<div class="toc-codenumber-cell"> </div>
-													<div class="toc-title-cell">Another subsection</div>
-												</a>
-											</div>
-										</div>
-										<ul class="toc-nested">
-											<li class="subsubsection link">
-												<div class="toc-line-table">
-													<div class="toc-line-row">
-														<div class="toc-caret-cell"> </div>
-														<a href="section-5.html#subsubsection-28"
-															data-scroll="subsubsection-28">
-															<div class="toc-codenumber-cell"> </div>
-															<div class="toc-title-cell">A subsubsection</div>
-														</a>
-													</div>
-												</div>
-											</li>
-											<li class="subsubsection link">
-												<div class="toc-line-table">
-													<div class="toc-line-row">
-														<div class="toc-caret-cell"> </div>
-														<a href="section-5.html#subsubsection-29"
-															data-scroll="subsubsection-29">
-															<div class="toc-codenumber-cell"> </div>
-															<div class="toc-title-cell">Another subsubsection</div>
-														</a>
-													</div>
-												</div>
-											</li>
-											<li class="subsubsection link">
-												<div class="toc-line-table">
-													<div class="toc-line-row">
-														<div class="toc-caret-cell"> </div>
-														<a href="section-5.html#subsubsection-30"
-															data-scroll="subsubsection-30">
-															<div class="toc-codenumber-cell"> </div>
-															<div class="toc-title-cell">Yet another subsubsection</div>
-														</a>
-													</div>
-												</div>
-											</li>
-										</ul>
-									</li>
-									<li class="subsection link">
-										<div class="toc-line-table">
-											<div class="toc-line-row">
-												<div class="toc-caret-cell"> </div>
-												<a href="section-5.html#subsection-12" data-scroll="subsection-12">
-													<div class="toc-codenumber-cell"> </div>
-													<div class="toc-title-cell">A subsection with no subsubsections</div>
-												</a>
-											</div>
-										</div>
-									</li>
-								</ul>
-							</li>
-							<li class="section link">
-								<div class="toc-line-table">
-									<div class="toc-line-row">
-										<div class="toc-caret-cell"> </div>
-										<a href="section-6.html" data-scroll="section-6">
-											<div class="toc-codenumber-cell"> </div>
-											<div class="toc-title-cell">A section with no subsections</div>
-										</a>
-									</div>
-								</div>
-							</li>
-						</ul>
-					</li>
-					<li class="chapter link">
-						<div class="toc-line-table">
-							<div class="toc-line-row">
-								<div class="toc-caret-cell"> </div>
-								<a href="chapter-3.html" data-scroll="chapter-3">
-									<div class="toc-codenumber-cell">3</div>
-									<div class="toc-title-cell">A chapter with no sections</div>
-								</a>
-							</div>
+						<div class="toc-line">
+							<div class="toc-caret toc-blank-caret"></div>
+							<a data-scroll="chapter-3" href="chapter-3.html"><span class="codenumber">3</span> <span
+									class="title">A chapter with no sections</span></a>
 						</div>
 					</li>
 				</ul>
 			</li>
-			<li class="part link">
-				<div class="toc-line-table">
-					<div class="toc-line-row">
-						<div class="toc-caret-cell"> </div>
-						<a href="part-2.html" data-scroll="part-2">
-							<div class="toc-codenumber-cell">II</div>
-							<div class="toc-title-cell">A repeat part</div>
-						</a>
-					</div>
+			<li class="part link toc-contains-nested toc-nested-shown">
+				<div class="toc-line">
+					<div class="toc-caret toc-blank-caret"></div>
+					<a data-scroll="part-2" href="part-2.html"><span class="codenumber">II</span> <span class="title">A
+							repeat part</span></a>
 				</div>
 				<ul>
-					<li class="chapter link">
-						<div class="toc-line-table">
-							<div class="toc-line-row">
-								<div class="toc-caret-cell">
-									<span class="toc-caret-show">&#x25b8;</span><span class="toc-caret-hide">&#x25be;</span>
-								</div>
-								<a href="chapter-4.html" data-scroll="chapter-4">
-									<div class="toc-codenumber-cell">4</div>
-									<div class="toc-title-cell">A chapter</div>
-								</a>
+					<li class="chapter link toc-contains-nested">
+						<div class="toc-line">
+							<div class="toc-caret">
+								<span class="toc-caret-show">▸</span><span class="toc-caret-hide">▾</span>
 							</div>
+							<a data-scroll="chapter-4" href="chapter-4.html"><span class="codenumber">4</span> <span
+									class="title">A chapter</span></a>
 						</div>
-						<ul class="toc-nested">
-							<li class="section link">
-								<div class="toc-line-table">
-									<div class="toc-line-row">
-										<div class="toc-caret-cell">
-											<span class="toc-caret-show">&#x25b8;</span><span
-												class="toc-caret-hide">&#x25be;</span>
-										</div>
-										<a href="section-7.html" data-scroll="section-7">
-											<div class="toc-codenumber-cell"> </div>
-											<div class="toc-title-cell">A section</div>
-										</a>
+						<ul>
+							<li class="section link toc-contains-nested">
+								<div class="toc-line">
+									<div class="toc-caret">
+										<span class="toc-caret-show">▸</span><span class="toc-caret-hide">▾</span>
 									</div>
+									<a data-scroll="section-7" href="section-7.html"><span class="codenumber"></span> <span
+											class="title">A section</span></a>
 								</div>
-								<ul class="toc-nested">
-									<li class="subsection link">
-										<div class="toc-line-table">
-											<div class="toc-line-row">
-												<div class="toc-caret-cell">
-													<span class="toc-caret-show">&#x25b8;</span><span
-														class="toc-caret-hide">&#x25be;</span>
-												</div>
-												<a href="section-7.html#subsection-13" data-scroll="subsection-13">
-													<div class="toc-codenumber-cell"> </div>
-													<div class="toc-title-cell">A subsection</div>
-												</a>
+								<ul>
+									<li class="subsection link toc-contains-nested">
+										<div class="toc-line">
+											<div class="toc-caret">
+												<span class="toc-caret-show">▸</span><span class="toc-caret-hide">▾</span>
 											</div>
+											<a data-scroll="subsection-13" href="section-7.html#subsection-13"><span
+													class="codenumber"></span> <span class="title">A subsection</span></a>
 										</div>
-										<ul class="toc-nested">
+										<ul>
 											<li class="subsubsection link">
-												<div class="toc-line-table">
-													<div class="toc-line-row">
-														<div class="toc-caret-cell"> </div>
-														<a href="section-7.html#subsubsection-31"
-															data-scroll="subsubsection-31">
-															<div class="toc-codenumber-cell"> </div>
-															<div class="toc-title-cell">A subsubsection</div>
-														</a>
-													</div>
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-31"
+														href="section-7.html#subsubsection-31"><span
+															class="codenumber"></span> <span class="title">A
+															subsubsection</span></a>
 												</div>
 											</li>
 											<li class="subsubsection link">
-												<div class="toc-line-table">
-													<div class="toc-line-row">
-														<div class="toc-caret-cell"> </div>
-														<a href="section-7.html#subsubsection-32"
-															data-scroll="subsubsection-32">
-															<div class="toc-codenumber-cell"> </div>
-															<div class="toc-title-cell">Another subsubsection</div>
-														</a>
-													</div>
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-32"
+														href="section-7.html#subsubsection-32"><span
+															class="codenumber"></span> <span class="title">Another
+															subsubsection</span></a>
 												</div>
 											</li>
 											<li class="subsubsection link">
-												<div class="toc-line-table">
-													<div class="toc-line-row">
-														<div class="toc-caret-cell"> </div>
-														<a href="section-7.html#subsubsection-33"
-															data-scroll="subsubsection-33">
-															<div class="toc-codenumber-cell"> </div>
-															<div class="toc-title-cell">Yet another subsubsection</div>
-														</a>
-													</div>
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-33"
+														href="section-7.html#subsubsection-33"><span
+															class="codenumber"></span> <span class="title">Yet another
+															subsubsection</span></a>
 												</div>
 											</li>
 										</ul>
 									</li>
-									<li class="subsection link">
-										<div class="toc-line-table">
-											<div class="toc-line-row">
-												<div class="toc-caret-cell">
-													<span class="toc-caret-show">&#x25b8;</span><span
-														class="toc-caret-hide">&#x25be;</span>
-												</div>
-												<a href="section-7.html#subsection-14" data-scroll="subsection-14">
-													<div class="toc-codenumber-cell"> </div>
-													<div class="toc-title-cell">Another subsection</div>
-												</a>
+									<li class="subsection link toc-contains-nested">
+										<div class="toc-line">
+											<div class="toc-caret">
+												<span class="toc-caret-show">▸</span><span class="toc-caret-hide">▾</span>
 											</div>
+											<a data-scroll="subsection-14" href="section-7.html#subsection-14"><span
+													class="codenumber"></span> <span class="title">Another
+													subsection</span></a>
 										</div>
-										<ul class="toc-nested">
+										<ul>
 											<li class="subsubsection link">
-												<div class="toc-line-table">
-													<div class="toc-line-row">
-														<div class="toc-caret-cell"> </div>
-														<a href="section-7.html#subsubsection-34"
-															data-scroll="subsubsection-34">
-															<div class="toc-codenumber-cell"> </div>
-															<div class="toc-title-cell">A subsubsection</div>
-														</a>
-													</div>
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-34"
+														href="section-7.html#subsubsection-34"><span
+															class="codenumber"></span> <span class="title">A
+															subsubsection</span></a>
 												</div>
 											</li>
 											<li class="subsubsection link">
-												<div class="toc-line-table">
-													<div class="toc-line-row">
-														<div class="toc-caret-cell"> </div>
-														<a href="section-7.html#subsubsection-35"
-															data-scroll="subsubsection-35">
-															<div class="toc-codenumber-cell"> </div>
-															<div class="toc-title-cell">Another subsubsection</div>
-														</a>
-													</div>
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-35"
+														href="section-7.html#subsubsection-35"><span
+															class="codenumber"></span> <span class="title">Another
+															subsubsection</span></a>
 												</div>
 											</li>
 											<li class="subsubsection link">
-												<div class="toc-line-table">
-													<div class="toc-line-row">
-														<div class="toc-caret-cell"> </div>
-														<a href="section-7.html#subsubsection-36"
-															data-scroll="subsubsection-36">
-															<div class="toc-codenumber-cell"> </div>
-															<div class="toc-title-cell">Yet another subsubsection</div>
-														</a>
-													</div>
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-36"
+														href="section-7.html#subsubsection-36"><span
+															class="codenumber"></span> <span class="title">Yet another
+															subsubsection</span></a>
 												</div>
 											</li>
 										</ul>
 									</li>
-									<li class="subsection link">
-										<div class="toc-line-table">
-											<div class="toc-line-row">
-												<div class="toc-caret-cell">
-													<span class="toc-caret-show">&#x25b8;</span><span
-														class="toc-caret-hide">&#x25be;</span>
-												</div>
-												<a href="section-7.html#subsection-15" data-scroll="subsection-15">
-													<div class="toc-codenumber-cell"> </div>
-													<div class="toc-title-cell">Yet another subsection</div>
-												</a>
+									<li class="subsection link toc-contains-nested">
+										<div class="toc-line">
+											<div class="toc-caret">
+												<span class="toc-caret-show">▸</span><span class="toc-caret-hide">▾</span>
 											</div>
+											<a data-scroll="subsection-15" href="section-7.html#subsection-15"><span
+													class="codenumber"></span> <span class="title">Yet another
+													subsection</span></a>
 										</div>
-										<ul class="toc-nested">
+										<ul>
 											<li class="subsubsection link">
-												<div class="toc-line-table">
-													<div class="toc-line-row">
-														<div class="toc-caret-cell"> </div>
-														<a href="section-7.html#subsubsection-37"
-															data-scroll="subsubsection-37">
-															<div class="toc-codenumber-cell"> </div>
-															<div class="toc-title-cell">A subsubsection</div>
-														</a>
-													</div>
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-37"
+														href="section-7.html#subsubsection-37"><span
+															class="codenumber"></span> <span class="title">A
+															subsubsection</span></a>
 												</div>
 											</li>
 											<li class="subsubsection link">
-												<div class="toc-line-table">
-													<div class="toc-line-row">
-														<div class="toc-caret-cell"> </div>
-														<a href="section-7.html#subsubsection-38"
-															data-scroll="subsubsection-38">
-															<div class="toc-codenumber-cell"> </div>
-															<div class="toc-title-cell">Another subsubsection</div>
-														</a>
-													</div>
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-38"
+														href="section-7.html#subsubsection-38"><span
+															class="codenumber"></span> <span class="title">Another
+															subsubsection</span></a>
 												</div>
 											</li>
 											<li class="subsubsection link">
-												<div class="toc-line-table">
-													<div class="toc-line-row">
-														<div class="toc-caret-cell"> </div>
-														<a href="section-7.html#subsubsection-39"
-															data-scroll="subsubsection-39">
-															<div class="toc-codenumber-cell"> </div>
-															<div class="toc-title-cell">Yet another subsubsection</div>
-														</a>
-													</div>
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-39"
+														href="section-7.html#subsubsection-39"><span
+															class="codenumber"></span> <span class="title">Yet another
+															subsubsection</span></a>
 												</div>
 											</li>
 										</ul>
 									</li>
 								</ul>
 							</li>
-							<li class="section link">
-								<div class="toc-line-table">
-									<div class="toc-line-row">
-										<div class="toc-caret-cell">
-											<span class="toc-caret-show">&#x25b8;</span><span
-												class="toc-caret-hide">&#x25be;</span>
-										</div>
-										<a href="section-8.html" data-scroll="section-8">
-											<div class="toc-codenumber-cell"> </div>
-											<div class="toc-title-cell">Another section</div>
-										</a>
+							<li class="section link toc-contains-nested">
+								<div class="toc-line">
+									<div class="toc-caret">
+										<span class="toc-caret-show">▸</span><span class="toc-caret-hide">▾</span>
 									</div>
+									<a data-scroll="section-8" href="section-8.html"><span class="codenumber"></span> <span
+											class="title">Another section</span></a>
 								</div>
-								<ul class="toc-nested">
-									<li class="subsection link">
-										<div class="toc-line-table">
-											<div class="toc-line-row">
-												<div class="toc-caret-cell">
-													<span class="toc-caret-show">&#x25b8;</span><span
-														class="toc-caret-hide">&#x25be;</span>
-												</div>
-												<a href="section-8.html#subsection-16" data-scroll="subsection-16">
-													<div class="toc-codenumber-cell"> </div>
-													<div class="toc-title-cell">A subsection</div>
-												</a>
+								<ul>
+									<li class="subsection link toc-contains-nested">
+										<div class="toc-line">
+											<div class="toc-caret">
+												<span class="toc-caret-show">▸</span><span class="toc-caret-hide">▾</span>
 											</div>
+											<a data-scroll="subsection-16" href="section-8.html#subsection-16"><span
+													class="codenumber"></span> <span class="title">A subsection</span></a>
 										</div>
-										<ul class="toc-nested">
+										<ul>
 											<li class="subsubsection link">
-												<div class="toc-line-table">
-													<div class="toc-line-row">
-														<div class="toc-caret-cell"> </div>
-														<a href="section-8.html#subsubsection-40"
-															data-scroll="subsubsection-40">
-															<div class="toc-codenumber-cell"> </div>
-															<div class="toc-title-cell">A subsubsection</div>
-														</a>
-													</div>
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-40"
+														href="section-8.html#subsubsection-40"><span
+															class="codenumber"></span> <span class="title">A
+															subsubsection</span></a>
 												</div>
 											</li>
 											<li class="subsubsection link">
-												<div class="toc-line-table">
-													<div class="toc-line-row">
-														<div class="toc-caret-cell"> </div>
-														<a href="section-8.html#subsubsection-41"
-															data-scroll="subsubsection-41">
-															<div class="toc-codenumber-cell"> </div>
-															<div class="toc-title-cell">Another subsubsection</div>
-														</a>
-													</div>
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-41"
+														href="section-8.html#subsubsection-41"><span
+															class="codenumber"></span> <span class="title">Another
+															subsubsection</span></a>
 												</div>
 											</li>
 											<li class="subsubsection link">
-												<div class="toc-line-table">
-													<div class="toc-line-row">
-														<div class="toc-caret-cell"> </div>
-														<a href="section-8.html#subsubsection-42"
-															data-scroll="subsubsection-42">
-															<div class="toc-codenumber-cell"> </div>
-															<div class="toc-title-cell">Yet another subsubsection</div>
-														</a>
-													</div>
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-42"
+														href="section-8.html#subsubsection-42"><span
+															class="codenumber"></span> <span class="title">Yet another
+															subsubsection</span></a>
+												</div>
+											</li>
+										</ul>
+									</li>
+									<li class="subsection link toc-contains-nested">
+										<div class="toc-line">
+											<div class="toc-caret">
+												<span class="toc-caret-show">▸</span><span class="toc-caret-hide">▾</span>
+											</div>
+											<a data-scroll="subsection-17" href="section-8.html#subsection-17"><span
+													class="codenumber"></span> <span class="title">Another
+													subsection</span></a>
+										</div>
+										<ul>
+											<li class="subsubsection link">
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-43"
+														href="section-8.html#subsubsection-43"><span
+															class="codenumber"></span> <span class="title">A
+															subsubsection</span></a>
+												</div>
+											</li>
+											<li class="subsubsection link">
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-44"
+														href="section-8.html#subsubsection-44"><span
+															class="codenumber"></span> <span class="title">Another
+															subsubsection</span></a>
+												</div>
+											</li>
+											<li class="subsubsection link">
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-45"
+														href="section-8.html#subsubsection-45"><span
+															class="codenumber"></span> <span class="title">Yet another
+															subsubsection</span></a>
 												</div>
 											</li>
 										</ul>
 									</li>
 									<li class="subsection link">
-										<div class="toc-line-table">
-											<div class="toc-line-row">
-												<div class="toc-caret-cell">
-													<span class="toc-caret-show">&#x25b8;</span><span
-														class="toc-caret-hide">&#x25be;</span>
-												</div>
-												<a href="section-8.html#subsection-17" data-scroll="subsection-17">
-													<div class="toc-codenumber-cell"> </div>
-													<div class="toc-title-cell">Another subsection</div>
-												</a>
-											</div>
-										</div>
-										<ul class="toc-nested">
-											<li class="subsubsection link">
-												<div class="toc-line-table">
-													<div class="toc-line-row">
-														<div class="toc-caret-cell"> </div>
-														<a href="section-8.html#subsubsection-43"
-															data-scroll="subsubsection-43">
-															<div class="toc-codenumber-cell"> </div>
-															<div class="toc-title-cell">A subsubsection</div>
-														</a>
-													</div>
-												</div>
-											</li>
-											<li class="subsubsection link">
-												<div class="toc-line-table">
-													<div class="toc-line-row">
-														<div class="toc-caret-cell"> </div>
-														<a href="section-8.html#subsubsection-44"
-															data-scroll="subsubsection-44">
-															<div class="toc-codenumber-cell"> </div>
-															<div class="toc-title-cell">Another subsubsection</div>
-														</a>
-													</div>
-												</div>
-											</li>
-											<li class="subsubsection link">
-												<div class="toc-line-table">
-													<div class="toc-line-row">
-														<div class="toc-caret-cell"> </div>
-														<a href="section-8.html#subsubsection-45"
-															data-scroll="subsubsection-45">
-															<div class="toc-codenumber-cell"> </div>
-															<div class="toc-title-cell">Yet another subsubsection</div>
-														</a>
-													</div>
-												</div>
-											</li>
-										</ul>
-									</li>
-									<li class="subsection link">
-										<div class="toc-line-table">
-											<div class="toc-line-row">
-												<div class="toc-caret-cell"> </div>
-												<a href="section-8.html#subsection-18" data-scroll="subsection-18">
-													<div class="toc-codenumber-cell"> </div>
-													<div class="toc-title-cell">A subsection with no subsubsections</div>
-												</a>
-											</div>
+										<div class="toc-line">
+											<div class="toc-caret toc-blank-caret"></div>
+											<a data-scroll="subsection-18" href="section-8.html#subsection-18"><span
+													class="codenumber"></span> <span class="title">A subsection with no
+													subsubsections</span></a>
 										</div>
 									</li>
 								</ul>
 							</li>
 							<li class="section link">
-								<div class="toc-line-table">
-									<div class="toc-line-row">
-										<div class="toc-caret-cell"> </div>
-										<a href="section-9.html" data-scroll="section-9">
-											<div class="toc-codenumber-cell"> </div>
-											<div class="toc-title-cell">A section with no subsections</div>
-										</a>
+								<div class="toc-line">
+									<div class="toc-caret toc-blank-caret"></div>
+									<a data-scroll="section-9" href="section-9.html"><span class="codenumber"></span> <span
+											class="title">A section with no subsections</span></a>
+								</div>
+							</li>
+						</ul>
+					</li>
+					<li class="chapter link toc-contains-nested">
+						<div class="toc-line">
+							<div class="toc-caret">
+								<span class="toc-caret-show">▸</span><span class="toc-caret-hide">▾</span>
+							</div>
+							<a data-scroll="chapter-5" href="chapter-5.html"><span class="codenumber">5</span> <span
+									class="title">A repeat chapter</span></a>
+						</div>
+						<ul>
+							<li class="section link toc-contains-nested">
+								<div class="toc-line">
+									<div class="toc-caret">
+										<span class="toc-caret-show">▸</span><span class="toc-caret-hide">▾</span>
 									</div>
+									<a data-scroll="section-10" href="section-10.html"><span class="codenumber"></span>
+										<span class="title">A section</span></a>
+								</div>
+								<ul>
+									<li class="subsection link toc-contains-nested">
+										<div class="toc-line">
+											<div class="toc-caret">
+												<span class="toc-caret-show">▸</span><span class="toc-caret-hide">▾</span>
+											</div>
+											<a data-scroll="subsection-19" href="section-10.html#subsection-19"><span
+													class="codenumber"></span> <span class="title">A subsection</span></a>
+										</div>
+										<ul>
+											<li class="subsubsection link">
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-46"
+														href="section-10.html#subsubsection-46"><span
+															class="codenumber"></span> <span class="title">A
+															subsubsection</span></a>
+												</div>
+											</li>
+											<li class="subsubsection link">
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-47"
+														href="section-10.html#subsubsection-47"><span
+															class="codenumber"></span> <span class="title">Another
+															subsubsection</span></a>
+												</div>
+											</li>
+											<li class="subsubsection link">
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-48"
+														href="section-10.html#subsubsection-48"><span
+															class="codenumber"></span> <span class="title">Yet another
+															subsubsection</span></a>
+												</div>
+											</li>
+										</ul>
+									</li>
+									<li class="subsection link toc-contains-nested">
+										<div class="toc-line">
+											<div class="toc-caret">
+												<span class="toc-caret-show">▸</span><span class="toc-caret-hide">▾</span>
+											</div>
+											<a data-scroll="subsection-20" href="section-10.html#subsection-20"><span
+													class="codenumber"></span> <span class="title">Another
+													subsection</span></a>
+										</div>
+										<ul>
+											<li class="subsubsection link">
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-49"
+														href="section-10.html#subsubsection-49"><span
+															class="codenumber"></span> <span class="title">A
+															subsubsection</span></a>
+												</div>
+											</li>
+											<li class="subsubsection link">
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-50"
+														href="section-10.html#subsubsection-50"><span
+															class="codenumber"></span> <span class="title">Another
+															subsubsection</span></a>
+												</div>
+											</li>
+											<li class="subsubsection link">
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-51"
+														href="section-10.html#subsubsection-51"><span
+															class="codenumber"></span> <span class="title">Yet another
+															subsubsection</span></a>
+												</div>
+											</li>
+										</ul>
+									</li>
+									<li class="subsection link toc-contains-nested">
+										<div class="toc-line">
+											<div class="toc-caret">
+												<span class="toc-caret-show">▸</span><span class="toc-caret-hide">▾</span>
+											</div>
+											<a data-scroll="subsection-21" href="section-10.html#subsection-21"><span
+													class="codenumber"></span> <span class="title">Yet another
+													subsection</span></a>
+										</div>
+										<ul>
+											<li class="subsubsection link">
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-52"
+														href="section-10.html#subsubsection-52"><span
+															class="codenumber"></span> <span class="title">A
+															subsubsection</span></a>
+												</div>
+											</li>
+											<li class="subsubsection link">
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-53"
+														href="section-10.html#subsubsection-53"><span
+															class="codenumber"></span> <span class="title">Another
+															subsubsection</span></a>
+												</div>
+											</li>
+											<li class="subsubsection link">
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-54"
+														href="section-10.html#subsubsection-54"><span
+															class="codenumber"></span> <span class="title">Yet another
+															subsubsection</span></a>
+												</div>
+											</li>
+										</ul>
+									</li>
+								</ul>
+							</li>
+							<li class="section link toc-contains-nested">
+								<div class="toc-line">
+									<div class="toc-caret">
+										<span class="toc-caret-show">▸</span><span class="toc-caret-hide">▾</span>
+									</div>
+									<a data-scroll="section-11" href="section-11.html"><span class="codenumber"></span>
+										<span class="title">Another section</span></a>
+								</div>
+								<ul>
+									<li class="subsection link toc-contains-nested">
+										<div class="toc-line">
+											<div class="toc-caret">
+												<span class="toc-caret-show">▸</span><span class="toc-caret-hide">▾</span>
+											</div>
+											<a data-scroll="subsection-22" href="section-11.html#subsection-22"><span
+													class="codenumber"></span> <span class="title">A subsection</span></a>
+										</div>
+										<ul>
+											<li class="subsubsection link">
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-55"
+														href="section-11.html#subsubsection-55"><span
+															class="codenumber"></span> <span class="title">A
+															subsubsection</span></a>
+												</div>
+											</li>
+											<li class="subsubsection link">
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-56"
+														href="section-11.html#subsubsection-56"><span
+															class="codenumber"></span> <span class="title">Another
+															subsubsection</span></a>
+												</div>
+											</li>
+											<li class="subsubsection link">
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-57"
+														href="section-11.html#subsubsection-57"><span
+															class="codenumber"></span> <span class="title">Yet another
+															subsubsection</span></a>
+												</div>
+											</li>
+										</ul>
+									</li>
+									<li class="subsection link toc-contains-nested">
+										<div class="toc-line">
+											<div class="toc-caret">
+												<span class="toc-caret-show">▸</span><span class="toc-caret-hide">▾</span>
+											</div>
+											<a data-scroll="subsection-23" href="section-11.html#subsection-23"><span
+													class="codenumber"></span> <span class="title">Another
+													subsection</span></a>
+										</div>
+										<ul>
+											<li class="subsubsection link">
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-58"
+														href="section-11.html#subsubsection-58"><span
+															class="codenumber"></span> <span class="title">A
+															subsubsection</span></a>
+												</div>
+											</li>
+											<li class="subsubsection link">
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-59"
+														href="section-11.html#subsubsection-59"><span
+															class="codenumber"></span> <span class="title">Another
+															subsubsection</span></a>
+												</div>
+											</li>
+											<li class="subsubsection link">
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-60"
+														href="section-11.html#subsubsection-60"><span
+															class="codenumber"></span> <span class="title">Yet another
+															subsubsection</span></a>
+												</div>
+											</li>
+										</ul>
+									</li>
+									<li class="subsection link">
+										<div class="toc-line">
+											<div class="toc-caret toc-blank-caret"></div>
+											<a data-scroll="subsection-24" href="section-11.html#subsection-24"><span
+													class="codenumber"></span> <span class="title">A subsection with no
+													subsubsections</span></a>
+										</div>
+									</li>
+								</ul>
+							</li>
+							<li class="section link">
+								<div class="toc-line">
+									<div class="toc-caret toc-blank-caret"></div>
+									<a data-scroll="section-12" href="section-12.html"><span class="codenumber"></span>
+										<span class="title">A section with no subsections</span></a>
 								</div>
 							</li>
 						</ul>
 					</li>
 					<li class="chapter link">
-						<div class="toc-line-table">
-							<div class="toc-line-row">
-								<div class="toc-caret-cell">
-									<span class="toc-caret-show">&#x25b8;</span><span class="toc-caret-hide">&#x25be;</span>
-								</div>
-								<a href="chapter-5.html" data-scroll="chapter-5">
-									<div class="toc-codenumber-cell">5</div>
-									<div class="toc-title-cell">A repeat chapter</div>
-								</a>
-							</div>
+						<div class="toc-line">
+							<div class="toc-caret toc-blank-caret"></div>
+							<a data-scroll="chapter-6" href="chapter-6.html"><span class="codenumber">6</span> <span
+									class="title">A chapter with no sections</span></a>
 						</div>
-						<ul class="toc-nested">
-							<li class="section link">
-								<div class="toc-line-table">
-									<div class="toc-line-row">
-										<div class="toc-caret-cell">
-											<span class="toc-caret-show">&#x25b8;</span><span
-												class="toc-caret-hide">&#x25be;</span>
-										</div>
-										<a href="section-10.html" data-scroll="section-10">
-											<div class="toc-codenumber-cell"> </div>
-											<div class="toc-title-cell">A section</div>
-										</a>
+					</li>
+					<li class="chapter link toc-contains-nested">
+						<div class="toc-line">
+							<div class="toc-caret">
+								<span class="toc-caret-show">▸</span><span class="toc-caret-hide">▾</span>
+							</div>
+							<a data-scroll="chapter-7" href="chapter-7.html"><span class="codenumber">7</span> <span
+									class="title">A repeat chapter</span></a>
+						</div>
+						<ul>
+							<li class="section link toc-contains-nested">
+								<div class="toc-line">
+									<div class="toc-caret">
+										<span class="toc-caret-show">▸</span><span class="toc-caret-hide">▾</span>
 									</div>
+									<a data-scroll="section-13" href="section-13.html"><span class="codenumber"></span>
+										<span class="title">A section</span></a>
 								</div>
-								<ul class="toc-nested">
-									<li class="subsection link">
-										<div class="toc-line-table">
-											<div class="toc-line-row">
-												<div class="toc-caret-cell">
-													<span class="toc-caret-show">&#x25b8;</span><span
-														class="toc-caret-hide">&#x25be;</span>
-												</div>
-												<a href="section-10.html#subsection-19" data-scroll="subsection-19">
-													<div class="toc-codenumber-cell"> </div>
-													<div class="toc-title-cell">A subsection</div>
-												</a>
+								<ul>
+									<li class="subsection link toc-contains-nested">
+										<div class="toc-line">
+											<div class="toc-caret">
+												<span class="toc-caret-show">▸</span><span class="toc-caret-hide">▾</span>
 											</div>
+											<a data-scroll="subsection-25" href="section-13.html#subsection-25"><span
+													class="codenumber"></span> <span class="title">A subsection</span></a>
 										</div>
-										<ul class="toc-nested">
+										<ul>
 											<li class="subsubsection link">
-												<div class="toc-line-table">
-													<div class="toc-line-row">
-														<div class="toc-caret-cell"> </div>
-														<a href="section-10.html#subsubsection-46"
-															data-scroll="subsubsection-46">
-															<div class="toc-codenumber-cell"> </div>
-															<div class="toc-title-cell">A subsubsection</div>
-														</a>
-													</div>
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-61"
+														href="section-13.html#subsubsection-61"><span
+															class="codenumber"></span> <span class="title">A
+															subsubsection</span></a>
 												</div>
 											</li>
 											<li class="subsubsection link">
-												<div class="toc-line-table">
-													<div class="toc-line-row">
-														<div class="toc-caret-cell"> </div>
-														<a href="section-10.html#subsubsection-47"
-															data-scroll="subsubsection-47">
-															<div class="toc-codenumber-cell"> </div>
-															<div class="toc-title-cell">Another subsubsection</div>
-														</a>
-													</div>
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-62"
+														href="section-13.html#subsubsection-62"><span
+															class="codenumber"></span> <span class="title">Another
+															subsubsection</span></a>
 												</div>
 											</li>
 											<li class="subsubsection link">
-												<div class="toc-line-table">
-													<div class="toc-line-row">
-														<div class="toc-caret-cell"> </div>
-														<a href="section-10.html#subsubsection-48"
-															data-scroll="subsubsection-48">
-															<div class="toc-codenumber-cell"> </div>
-															<div class="toc-title-cell">Yet another subsubsection</div>
-														</a>
-													</div>
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-63"
+														href="section-13.html#subsubsection-63"><span
+															class="codenumber"></span> <span class="title">Yet another
+															subsubsection</span></a>
 												</div>
 											</li>
 										</ul>
 									</li>
-									<li class="subsection link">
-										<div class="toc-line-table">
-											<div class="toc-line-row">
-												<div class="toc-caret-cell">
-													<span class="toc-caret-show">&#x25b8;</span><span
-														class="toc-caret-hide">&#x25be;</span>
-												</div>
-												<a href="section-10.html#subsection-20" data-scroll="subsection-20">
-													<div class="toc-codenumber-cell"> </div>
-													<div class="toc-title-cell">Another subsection</div>
-												</a>
+									<li class="subsection link toc-contains-nested">
+										<div class="toc-line">
+											<div class="toc-caret">
+												<span class="toc-caret-show">▸</span><span class="toc-caret-hide">▾</span>
 											</div>
+											<a data-scroll="subsection-26" href="section-13.html#subsection-26"><span
+													class="codenumber"></span> <span class="title">Another
+													subsection</span></a>
 										</div>
-										<ul class="toc-nested">
+										<ul>
 											<li class="subsubsection link">
-												<div class="toc-line-table">
-													<div class="toc-line-row">
-														<div class="toc-caret-cell"> </div>
-														<a href="section-10.html#subsubsection-49"
-															data-scroll="subsubsection-49">
-															<div class="toc-codenumber-cell"> </div>
-															<div class="toc-title-cell">A subsubsection</div>
-														</a>
-													</div>
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-64"
+														href="section-13.html#subsubsection-64"><span
+															class="codenumber"></span> <span class="title">A
+															subsubsection</span></a>
 												</div>
 											</li>
 											<li class="subsubsection link">
-												<div class="toc-line-table">
-													<div class="toc-line-row">
-														<div class="toc-caret-cell"> </div>
-														<a href="section-10.html#subsubsection-50"
-															data-scroll="subsubsection-50">
-															<div class="toc-codenumber-cell"> </div>
-															<div class="toc-title-cell">Another subsubsection</div>
-														</a>
-													</div>
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-65"
+														href="section-13.html#subsubsection-65"><span
+															class="codenumber"></span> <span class="title">Another
+															subsubsection</span></a>
 												</div>
 											</li>
 											<li class="subsubsection link">
-												<div class="toc-line-table">
-													<div class="toc-line-row">
-														<div class="toc-caret-cell"> </div>
-														<a href="section-10.html#subsubsection-51"
-															data-scroll="subsubsection-51">
-															<div class="toc-codenumber-cell"> </div>
-															<div class="toc-title-cell">Yet another subsubsection</div>
-														</a>
-													</div>
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-66"
+														href="section-13.html#subsubsection-66"><span
+															class="codenumber"></span> <span class="title">Yet another
+															subsubsection</span></a>
 												</div>
 											</li>
 										</ul>
 									</li>
-									<li class="subsection link">
-										<div class="toc-line-table">
-											<div class="toc-line-row">
-												<div class="toc-caret-cell">
-													<span class="toc-caret-show">&#x25b8;</span><span
-														class="toc-caret-hide">&#x25be;</span>
-												</div>
-												<a href="section-10.html#subsection-21" data-scroll="subsection-21">
-													<div class="toc-codenumber-cell"> </div>
-													<div class="toc-title-cell">Yet another subsection</div>
-												</a>
+									<li class="subsection link toc-contains-nested">
+										<div class="toc-line">
+											<div class="toc-caret">
+												<span class="toc-caret-show">▸</span><span class="toc-caret-hide">▾</span>
 											</div>
+											<a data-scroll="subsection-27" href="section-13.html#subsection-27"><span
+													class="codenumber"></span> <span class="title">Yet another
+													subsection</span></a>
 										</div>
-										<ul class="toc-nested">
+										<ul>
 											<li class="subsubsection link">
-												<div class="toc-line-table">
-													<div class="toc-line-row">
-														<div class="toc-caret-cell"> </div>
-														<a href="section-10.html#subsubsection-52"
-															data-scroll="subsubsection-52">
-															<div class="toc-codenumber-cell"> </div>
-															<div class="toc-title-cell">A subsubsection</div>
-														</a>
-													</div>
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-67"
+														href="section-13.html#subsubsection-67"><span
+															class="codenumber"></span> <span class="title">A
+															subsubsection</span></a>
 												</div>
 											</li>
 											<li class="subsubsection link">
-												<div class="toc-line-table">
-													<div class="toc-line-row">
-														<div class="toc-caret-cell"> </div>
-														<a href="section-10.html#subsubsection-53"
-															data-scroll="subsubsection-53">
-															<div class="toc-codenumber-cell"> </div>
-															<div class="toc-title-cell">Another subsubsection</div>
-														</a>
-													</div>
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-68"
+														href="section-13.html#subsubsection-68"><span
+															class="codenumber"></span> <span class="title">Another
+															subsubsection</span></a>
 												</div>
 											</li>
 											<li class="subsubsection link">
-												<div class="toc-line-table">
-													<div class="toc-line-row">
-														<div class="toc-caret-cell"> </div>
-														<a href="section-10.html#subsubsection-54"
-															data-scroll="subsubsection-54">
-															<div class="toc-codenumber-cell"> </div>
-															<div class="toc-title-cell">Yet another subsubsection</div>
-														</a>
-													</div>
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-69"
+														href="section-13.html#subsubsection-69"><span
+															class="codenumber"></span> <span class="title">Yet another
+															subsubsection</span></a>
 												</div>
 											</li>
 										</ul>
 									</li>
 								</ul>
 							</li>
-							<li class="section link">
-								<div class="toc-line-table">
-									<div class="toc-line-row">
-										<div class="toc-caret-cell">
-											<span class="toc-caret-show">&#x25b8;</span><span
-												class="toc-caret-hide">&#x25be;</span>
-										</div>
-										<a href="section-11.html" data-scroll="section-11">
-											<div class="toc-codenumber-cell"> </div>
-											<div class="toc-title-cell">Another section</div>
-										</a>
+							<li class="section link toc-contains-nested">
+								<div class="toc-line">
+									<div class="toc-caret">
+										<span class="toc-caret-show">▸</span><span class="toc-caret-hide">▾</span>
 									</div>
+									<a data-scroll="section-14" href="section-14.html"><span class="codenumber"></span>
+										<span class="title">Another section</span></a>
 								</div>
-								<ul class="toc-nested">
-									<li class="subsection link">
-										<div class="toc-line-table">
-											<div class="toc-line-row">
-												<div class="toc-caret-cell">
-													<span class="toc-caret-show">&#x25b8;</span><span
-														class="toc-caret-hide">&#x25be;</span>
-												</div>
-												<a href="section-11.html#subsection-22" data-scroll="subsection-22">
-													<div class="toc-codenumber-cell"> </div>
-													<div class="toc-title-cell">A subsection</div>
-												</a>
+								<ul>
+									<li class="subsection link toc-contains-nested">
+										<div class="toc-line">
+											<div class="toc-caret">
+												<span class="toc-caret-show">▸</span><span class="toc-caret-hide">▾</span>
 											</div>
+											<a data-scroll="subsection-28" href="section-14.html#subsection-28"><span
+													class="codenumber"></span> <span class="title">A subsection</span></a>
 										</div>
-										<ul class="toc-nested">
+										<ul>
 											<li class="subsubsection link">
-												<div class="toc-line-table">
-													<div class="toc-line-row">
-														<div class="toc-caret-cell"> </div>
-														<a href="section-11.html#subsubsection-55"
-															data-scroll="subsubsection-55">
-															<div class="toc-codenumber-cell"> </div>
-															<div class="toc-title-cell">A subsubsection</div>
-														</a>
-													</div>
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-70"
+														href="section-14.html#subsubsection-70"><span
+															class="codenumber"></span> <span class="title">A
+															subsubsection</span></a>
 												</div>
 											</li>
 											<li class="subsubsection link">
-												<div class="toc-line-table">
-													<div class="toc-line-row">
-														<div class="toc-caret-cell"> </div>
-														<a href="section-11.html#subsubsection-56"
-															data-scroll="subsubsection-56">
-															<div class="toc-codenumber-cell"> </div>
-															<div class="toc-title-cell">Another subsubsection</div>
-														</a>
-													</div>
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-71"
+														href="section-14.html#subsubsection-71"><span
+															class="codenumber"></span> <span class="title">Another
+															subsubsection</span></a>
 												</div>
 											</li>
 											<li class="subsubsection link">
-												<div class="toc-line-table">
-													<div class="toc-line-row">
-														<div class="toc-caret-cell"> </div>
-														<a href="section-11.html#subsubsection-57"
-															data-scroll="subsubsection-57">
-															<div class="toc-codenumber-cell"> </div>
-															<div class="toc-title-cell">Yet another subsubsection</div>
-														</a>
-													</div>
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-72"
+														href="section-14.html#subsubsection-72"><span
+															class="codenumber"></span> <span class="title">Yet another
+															subsubsection</span></a>
+												</div>
+											</li>
+										</ul>
+									</li>
+									<li class="subsection link toc-contains-nested">
+										<div class="toc-line">
+											<div class="toc-caret">
+												<span class="toc-caret-show">▸</span><span class="toc-caret-hide">▾</span>
+											</div>
+											<a data-scroll="subsection-29" href="section-14.html#subsection-29"><span
+													class="codenumber"></span> <span class="title">Another
+													subsection</span></a>
+										</div>
+										<ul>
+											<li class="subsubsection link">
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-73"
+														href="section-14.html#subsubsection-73"><span
+															class="codenumber"></span> <span class="title">A
+															subsubsection</span></a>
+												</div>
+											</li>
+											<li class="subsubsection link">
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-74"
+														href="section-14.html#subsubsection-74"><span
+															class="codenumber"></span> <span class="title">Another
+															subsubsection</span></a>
+												</div>
+											</li>
+											<li class="subsubsection link">
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-75"
+														href="section-14.html#subsubsection-75"><span
+															class="codenumber"></span> <span class="title">Yet another
+															subsubsection</span></a>
 												</div>
 											</li>
 										</ul>
 									</li>
 									<li class="subsection link">
-										<div class="toc-line-table">
-											<div class="toc-line-row">
-												<div class="toc-caret-cell">
-													<span class="toc-caret-show">&#x25b8;</span><span
-														class="toc-caret-hide">&#x25be;</span>
-												</div>
-												<a href="section-11.html#subsection-23" data-scroll="subsection-23">
-													<div class="toc-codenumber-cell"> </div>
-													<div class="toc-title-cell">Another subsection</div>
-												</a>
-											</div>
-										</div>
-										<ul class="toc-nested">
-											<li class="subsubsection link">
-												<div class="toc-line-table">
-													<div class="toc-line-row">
-														<div class="toc-caret-cell"> </div>
-														<a href="section-11.html#subsubsection-58"
-															data-scroll="subsubsection-58">
-															<div class="toc-codenumber-cell"> </div>
-															<div class="toc-title-cell">A subsubsection</div>
-														</a>
-													</div>
-												</div>
-											</li>
-											<li class="subsubsection link">
-												<div class="toc-line-table">
-													<div class="toc-line-row">
-														<div class="toc-caret-cell"> </div>
-														<a href="section-11.html#subsubsection-59"
-															data-scroll="subsubsection-59">
-															<div class="toc-codenumber-cell"> </div>
-															<div class="toc-title-cell">Another subsubsection</div>
-														</a>
-													</div>
-												</div>
-											</li>
-											<li class="subsubsection link">
-												<div class="toc-line-table">
-													<div class="toc-line-row">
-														<div class="toc-caret-cell"> </div>
-														<a href="section-11.html#subsubsection-60"
-															data-scroll="subsubsection-60">
-															<div class="toc-codenumber-cell"> </div>
-															<div class="toc-title-cell">Yet another subsubsection</div>
-														</a>
-													</div>
-												</div>
-											</li>
-										</ul>
-									</li>
-									<li class="subsection link">
-										<div class="toc-line-table">
-											<div class="toc-line-row">
-												<div class="toc-caret-cell"> </div>
-												<a href="section-11.html#subsection-24" data-scroll="subsection-24">
-													<div class="toc-codenumber-cell"> </div>
-													<div class="toc-title-cell">A subsection with no subsubsections</div>
-												</a>
-											</div>
+										<div class="toc-line">
+											<div class="toc-caret toc-blank-caret"></div>
+											<a data-scroll="subsection-30" href="section-14.html#subsection-30"><span
+													class="codenumber"></span> <span class="title">A subsection with no
+													subsubsections</span></a>
 										</div>
 									</li>
 								</ul>
 							</li>
 							<li class="section link">
-								<div class="toc-line-table">
-									<div class="toc-line-row">
-										<div class="toc-caret-cell"> </div>
-										<a href="section-12.html" data-scroll="section-12">
-											<div class="toc-codenumber-cell"> </div>
-											<div class="toc-title-cell">A section with no subsections</div>
-										</a>
-									</div>
+								<div class="toc-line">
+									<div class="toc-caret toc-blank-caret"></div>
+									<a data-scroll="section-15" href="section-15.html"><span class="codenumber"></span>
+										<span class="title">A section with no subsections</span></a>
 								</div>
 							</li>
 						</ul>
-					</li>
-					<li class="chapter link">
-						<div class="toc-line-table">
-							<div class="toc-line-row">
-								<div class="toc-caret-cell"> </div>
-								<a href="chapter-6.html" data-scroll="chapter-6">
-									<div class="toc-codenumber-cell">6</div>
-									<div class="toc-title-cell">A chapter with no sections</div>
-								</a>
-							</div>
-						</div>
 					</li>
 				</ul>
 			</li>
-			<li class="backmatter link">
-				<div class="toc-line-table">
-					<div class="toc-line-row">
-						<div class="toc-caret-cell"> </div>
-						<a href="backmatter-1.html" data-scroll="backmatter-1">
-							<div class="toc-codenumber-cell"> </div>
-							<div class="toc-title-cell">Back Matter</div>
-						</a>
-					</div>
+			<li class="backmatter link toc-contains-nested toc-nested-shown">
+				<div class="toc-line">
+					<div class="toc-caret toc-blank-caret"></div>
+					<a data-scroll="backmatter-1" href="backmatter-1.html"><span class="codenumber"></span> <span
+							class="title">Back Matter</span></a>
 				</div>
 				<ul>
-					<li class="appendix link">
-						<div class="toc-line-table">
-							<div class="toc-line-row">
-								<div class="toc-caret-cell">
-									<span class="toc-caret-show">&#x25b8;</span><span class="toc-caret-hide">&#x25be;</span>
-								</div>
-								<a href="appendix-1.html" data-scroll="appendix-1">
-									<div class="toc-codenumber-cell"> </div>
-									<div class="toc-title-cell">An appendix</div>
-								</a>
+					<li class="appendix link toc-contains-nested">
+						<div class="toc-line">
+							<div class="toc-caret">
+								<span class="toc-caret-show">▸</span><span class="toc-caret-hide">▾</span>
 							</div>
+							<a data-scroll="appendix-1" href="appendix-1.html"><span class="codenumber"></span> <span
+									class="title">An appendix</span></a>
 						</div>
-						<ul class="toc-nested">
-							<li class="section link">
-								<div class="toc-line-table">
-									<div class="toc-line-row">
-										<div class="toc-caret-cell">
-											<span class="toc-caret-show">&#x25b8;</span><span
-												class="toc-caret-hide">&#x25be;</span>
-										</div>
-										<a href="section-13.html" data-scroll="section-13">
-											<div class="toc-codenumber-cell"> </div>
-											<div class="toc-title-cell">A section</div>
-										</a>
+						<ul>
+							<li class="section link toc-contains-nested">
+								<div class="toc-line">
+									<div class="toc-caret">
+										<span class="toc-caret-show">▸</span><span class="toc-caret-hide">▾</span>
 									</div>
+									<a data-scroll="section-16" href="section-16.html"><span class="codenumber"></span>
+										<span class="title">A section</span></a>
 								</div>
-								<ul class="toc-nested">
-									<li class="subsection link">
-										<div class="toc-line-table">
-											<div class="toc-line-row">
-												<div class="toc-caret-cell">
-													<span class="toc-caret-show">&#x25b8;</span><span
-														class="toc-caret-hide">&#x25be;</span>
-												</div>
-												<a href="section-13.html#subsection-25" data-scroll="subsection-25">
-													<div class="toc-codenumber-cell"> </div>
-													<div class="toc-title-cell">A subsection</div>
-												</a>
+								<ul>
+									<li class="subsection link toc-contains-nested">
+										<div class="toc-line">
+											<div class="toc-caret">
+												<span class="toc-caret-show">▸</span><span class="toc-caret-hide">▾</span>
 											</div>
+											<a data-scroll="subsection-31" href="section-16.html#subsection-31"><span
+													class="codenumber"></span> <span class="title">A subsection</span></a>
 										</div>
-										<ul class="toc-nested">
+										<ul>
 											<li class="subsubsection link">
-												<div class="toc-line-table">
-													<div class="toc-line-row">
-														<div class="toc-caret-cell"> </div>
-														<a href="section-13.html#subsubsection-61"
-															data-scroll="subsubsection-61">
-															<div class="toc-codenumber-cell"> </div>
-															<div class="toc-title-cell">A subsubsection</div>
-														</a>
-													</div>
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-76"
+														href="section-16.html#subsubsection-76"><span
+															class="codenumber"></span> <span class="title">A
+															subsubsection</span></a>
 												</div>
 											</li>
 											<li class="subsubsection link">
-												<div class="toc-line-table">
-													<div class="toc-line-row">
-														<div class="toc-caret-cell"> </div>
-														<a href="section-13.html#subsubsection-62"
-															data-scroll="subsubsection-62">
-															<div class="toc-codenumber-cell"> </div>
-															<div class="toc-title-cell">Another subsubsection</div>
-														</a>
-													</div>
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-77"
+														href="section-16.html#subsubsection-77"><span
+															class="codenumber"></span> <span class="title">Another
+															subsubsection</span></a>
 												</div>
 											</li>
 											<li class="subsubsection link">
-												<div class="toc-line-table">
-													<div class="toc-line-row">
-														<div class="toc-caret-cell"> </div>
-														<a href="section-13.html#subsubsection-63"
-															data-scroll="subsubsection-63">
-															<div class="toc-codenumber-cell"> </div>
-															<div class="toc-title-cell">Yet another subsubsection</div>
-														</a>
-													</div>
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-78"
+														href="section-16.html#subsubsection-78"><span
+															class="codenumber"></span> <span class="title">Yet another
+															subsubsection</span></a>
 												</div>
 											</li>
 										</ul>
 									</li>
-									<li class="subsection link">
-										<div class="toc-line-table">
-											<div class="toc-line-row">
-												<div class="toc-caret-cell">
-													<span class="toc-caret-show">&#x25b8;</span><span
-														class="toc-caret-hide">&#x25be;</span>
-												</div>
-												<a href="section-13.html#subsection-26" data-scroll="subsection-26">
-													<div class="toc-codenumber-cell"> </div>
-													<div class="toc-title-cell">Another subsection</div>
-												</a>
+									<li class="subsection link toc-contains-nested">
+										<div class="toc-line">
+											<div class="toc-caret">
+												<span class="toc-caret-show">▸</span><span class="toc-caret-hide">▾</span>
 											</div>
+											<a data-scroll="subsection-32" href="section-16.html#subsection-32"><span
+													class="codenumber"></span> <span class="title">Another
+													subsection</span></a>
 										</div>
-										<ul class="toc-nested">
+										<ul>
 											<li class="subsubsection link">
-												<div class="toc-line-table">
-													<div class="toc-line-row">
-														<div class="toc-caret-cell"> </div>
-														<a href="section-13.html#subsubsection-64"
-															data-scroll="subsubsection-64">
-															<div class="toc-codenumber-cell"> </div>
-															<div class="toc-title-cell">A subsubsection</div>
-														</a>
-													</div>
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-79"
+														href="section-16.html#subsubsection-79"><span
+															class="codenumber"></span> <span class="title">A
+															subsubsection</span></a>
 												</div>
 											</li>
 											<li class="subsubsection link">
-												<div class="toc-line-table">
-													<div class="toc-line-row">
-														<div class="toc-caret-cell"> </div>
-														<a href="section-13.html#subsubsection-65"
-															data-scroll="subsubsection-65">
-															<div class="toc-codenumber-cell"> </div>
-															<div class="toc-title-cell">Another subsubsection</div>
-														</a>
-													</div>
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-80"
+														href="section-16.html#subsubsection-80"><span
+															class="codenumber"></span> <span class="title">Another
+															subsubsection</span></a>
 												</div>
 											</li>
 											<li class="subsubsection link">
-												<div class="toc-line-table">
-													<div class="toc-line-row">
-														<div class="toc-caret-cell"> </div>
-														<a href="section-13.html#subsubsection-66"
-															data-scroll="subsubsection-66">
-															<div class="toc-codenumber-cell"> </div>
-															<div class="toc-title-cell">Yet another subsubsection</div>
-														</a>
-													</div>
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-81"
+														href="section-16.html#subsubsection-81"><span
+															class="codenumber"></span> <span class="title">Yet another
+															subsubsection</span></a>
 												</div>
 											</li>
 										</ul>
 									</li>
-									<li class="subsection link">
-										<div class="toc-line-table">
-											<div class="toc-line-row">
-												<div class="toc-caret-cell">
-													<span class="toc-caret-show">&#x25b8;</span><span
-														class="toc-caret-hide">&#x25be;</span>
-												</div>
-												<a href="section-13.html#subsection-27" data-scroll="subsection-27">
-													<div class="toc-codenumber-cell"> </div>
-													<div class="toc-title-cell">Yet another subsection</div>
-												</a>
+									<li class="subsection link toc-contains-nested">
+										<div class="toc-line">
+											<div class="toc-caret">
+												<span class="toc-caret-show">▸</span><span class="toc-caret-hide">▾</span>
 											</div>
+											<a data-scroll="subsection-33" href="section-16.html#subsection-33"><span
+													class="codenumber"></span> <span class="title">Yet another
+													subsection</span></a>
 										</div>
-										<ul class="toc-nested">
+										<ul>
 											<li class="subsubsection link">
-												<div class="toc-line-table">
-													<div class="toc-line-row">
-														<div class="toc-caret-cell"> </div>
-														<a href="section-13.html#subsubsection-67"
-															data-scroll="subsubsection-67">
-															<div class="toc-codenumber-cell"> </div>
-															<div class="toc-title-cell">A subsubsection</div>
-														</a>
-													</div>
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-82"
+														href="section-16.html#subsubsection-82"><span
+															class="codenumber"></span> <span class="title">A
+															subsubsection</span></a>
 												</div>
 											</li>
 											<li class="subsubsection link">
-												<div class="toc-line-table">
-													<div class="toc-line-row">
-														<div class="toc-caret-cell"> </div>
-														<a href="section-13.html#subsubsection-68"
-															data-scroll="subsubsection-68">
-															<div class="toc-codenumber-cell"> </div>
-															<div class="toc-title-cell">Another subsubsection</div>
-														</a>
-													</div>
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-83"
+														href="section-16.html#subsubsection-83"><span
+															class="codenumber"></span> <span class="title">Another
+															subsubsection</span></a>
 												</div>
 											</li>
 											<li class="subsubsection link">
-												<div class="toc-line-table">
-													<div class="toc-line-row">
-														<div class="toc-caret-cell"> </div>
-														<a href="section-13.html#subsubsection-69"
-															data-scroll="subsubsection-69">
-															<div class="toc-codenumber-cell"> </div>
-															<div class="toc-title-cell">Yet another subsubsection</div>
-														</a>
-													</div>
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-84"
+														href="section-16.html#subsubsection-84"><span
+															class="codenumber"></span> <span class="title">Yet another
+															subsubsection</span></a>
 												</div>
 											</li>
 										</ul>
 									</li>
 								</ul>
 							</li>
-							<li class="section link">
-								<div class="toc-line-table">
-									<div class="toc-line-row">
-										<div class="toc-caret-cell">
-											<span class="toc-caret-show">&#x25b8;</span><span
-												class="toc-caret-hide">&#x25be;</span>
-										</div>
-										<a href="section-14.html" data-scroll="section-14">
-											<div class="toc-codenumber-cell"> </div>
-											<div class="toc-title-cell">Another section</div>
-										</a>
+							<li class="section link toc-contains-nested">
+								<div class="toc-line">
+									<div class="toc-caret">
+										<span class="toc-caret-show">▸</span><span class="toc-caret-hide">▾</span>
 									</div>
+									<a data-scroll="section-17" href="section-17.html"><span class="codenumber"></span>
+										<span class="title">Another section</span></a>
 								</div>
-								<ul class="toc-nested">
-									<li class="subsection link">
-										<div class="toc-line-table">
-											<div class="toc-line-row">
-												<div class="toc-caret-cell">
-													<span class="toc-caret-show">&#x25b8;</span><span
-														class="toc-caret-hide">&#x25be;</span>
-												</div>
-												<a href="section-14.html#subsection-28" data-scroll="subsection-28">
-													<div class="toc-codenumber-cell"> </div>
-													<div class="toc-title-cell">A subsection</div>
-												</a>
+								<ul>
+									<li class="subsection link toc-contains-nested">
+										<div class="toc-line">
+											<div class="toc-caret">
+												<span class="toc-caret-show">▸</span><span class="toc-caret-hide">▾</span>
 											</div>
+											<a data-scroll="subsection-34" href="section-17.html#subsection-34"><span
+													class="codenumber"></span> <span class="title">A subsection</span></a>
 										</div>
-										<ul class="toc-nested">
+										<ul>
 											<li class="subsubsection link">
-												<div class="toc-line-table">
-													<div class="toc-line-row">
-														<div class="toc-caret-cell"> </div>
-														<a href="section-14.html#subsubsection-70"
-															data-scroll="subsubsection-70">
-															<div class="toc-codenumber-cell"> </div>
-															<div class="toc-title-cell">A subsubsection</div>
-														</a>
-													</div>
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-85"
+														href="section-17.html#subsubsection-85"><span
+															class="codenumber"></span> <span class="title">A
+															subsubsection</span></a>
 												</div>
 											</li>
 											<li class="subsubsection link">
-												<div class="toc-line-table">
-													<div class="toc-line-row">
-														<div class="toc-caret-cell"> </div>
-														<a href="section-14.html#subsubsection-71"
-															data-scroll="subsubsection-71">
-															<div class="toc-codenumber-cell"> </div>
-															<div class="toc-title-cell">Another subsubsection</div>
-														</a>
-													</div>
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-86"
+														href="section-17.html#subsubsection-86"><span
+															class="codenumber"></span> <span class="title">Another
+															subsubsection</span></a>
 												</div>
 											</li>
 											<li class="subsubsection link">
-												<div class="toc-line-table">
-													<div class="toc-line-row">
-														<div class="toc-caret-cell"> </div>
-														<a href="section-14.html#subsubsection-72"
-															data-scroll="subsubsection-72">
-															<div class="toc-codenumber-cell"> </div>
-															<div class="toc-title-cell">Yet another subsubsection</div>
-														</a>
-													</div>
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-87"
+														href="section-17.html#subsubsection-87"><span
+															class="codenumber"></span> <span class="title">Yet another
+															subsubsection</span></a>
+												</div>
+											</li>
+										</ul>
+									</li>
+									<li class="subsection link toc-contains-nested">
+										<div class="toc-line">
+											<div class="toc-caret">
+												<span class="toc-caret-show">▸</span><span class="toc-caret-hide">▾</span>
+											</div>
+											<a data-scroll="subsection-35" href="section-17.html#subsection-35"><span
+													class="codenumber"></span> <span class="title">Another
+													subsection</span></a>
+										</div>
+										<ul>
+											<li class="subsubsection link">
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-88"
+														href="section-17.html#subsubsection-88"><span
+															class="codenumber"></span> <span class="title">A
+															subsubsection</span></a>
+												</div>
+											</li>
+											<li class="subsubsection link">
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-89"
+														href="section-17.html#subsubsection-89"><span
+															class="codenumber"></span> <span class="title">Another
+															subsubsection</span></a>
+												</div>
+											</li>
+											<li class="subsubsection link">
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-90"
+														href="section-17.html#subsubsection-90"><span
+															class="codenumber"></span> <span class="title">Yet another
+															subsubsection</span></a>
 												</div>
 											</li>
 										</ul>
 									</li>
 									<li class="subsection link">
-										<div class="toc-line-table">
-											<div class="toc-line-row">
-												<div class="toc-caret-cell">
-													<span class="toc-caret-show">&#x25b8;</span><span
-														class="toc-caret-hide">&#x25be;</span>
-												</div>
-												<a href="section-14.html#subsection-29" data-scroll="subsection-29">
-													<div class="toc-codenumber-cell"> </div>
-													<div class="toc-title-cell">Another subsection</div>
-												</a>
-											</div>
-										</div>
-										<ul class="toc-nested">
-											<li class="subsubsection link">
-												<div class="toc-line-table">
-													<div class="toc-line-row">
-														<div class="toc-caret-cell"> </div>
-														<a href="section-14.html#subsubsection-73"
-															data-scroll="subsubsection-73">
-															<div class="toc-codenumber-cell"> </div>
-															<div class="toc-title-cell">A subsubsection</div>
-														</a>
-													</div>
-												</div>
-											</li>
-											<li class="subsubsection link">
-												<div class="toc-line-table">
-													<div class="toc-line-row">
-														<div class="toc-caret-cell"> </div>
-														<a href="section-14.html#subsubsection-74"
-															data-scroll="subsubsection-74">
-															<div class="toc-codenumber-cell"> </div>
-															<div class="toc-title-cell">Another subsubsection</div>
-														</a>
-													</div>
-												</div>
-											</li>
-											<li class="subsubsection link">
-												<div class="toc-line-table">
-													<div class="toc-line-row">
-														<div class="toc-caret-cell"> </div>
-														<a href="section-14.html#subsubsection-75"
-															data-scroll="subsubsection-75">
-															<div class="toc-codenumber-cell"> </div>
-															<div class="toc-title-cell">Yet another subsubsection</div>
-														</a>
-													</div>
-												</div>
-											</li>
-										</ul>
-									</li>
-									<li class="subsection link">
-										<div class="toc-line-table">
-											<div class="toc-line-row">
-												<div class="toc-caret-cell"> </div>
-												<a href="section-14.html#subsection-30" data-scroll="subsection-30">
-													<div class="toc-codenumber-cell"> </div>
-													<div class="toc-title-cell">A subsection with no subsubsections</div>
-												</a>
-											</div>
+										<div class="toc-line">
+											<div class="toc-caret toc-blank-caret"></div>
+											<a data-scroll="subsection-36" href="section-17.html#subsection-36"><span
+													class="codenumber"></span> <span class="title">A subsection with no
+													subsubsections</span></a>
 										</div>
 									</li>
 								</ul>
 							</li>
 							<li class="section link">
-								<div class="toc-line-table">
-									<div class="toc-line-row">
-										<div class="toc-caret-cell"> </div>
-										<a href="section-15.html" data-scroll="section-15">
-											<div class="toc-codenumber-cell"> </div>
-											<div class="toc-title-cell">A section with no subsections</div>
-										</a>
-									</div>
+								<div class="toc-line">
+									<div class="toc-caret toc-blank-caret"></div>
+									<a data-scroll="section-18" href="section-18.html"><span class="codenumber"></span>
+										<span class="title">A section with no subsections</span></a>
 								</div>
 							</li>
 						</ul>
 					</li>
-					<li class="appendix link">
-						<div class="toc-line-table">
-							<div class="toc-line-row">
-								<div class="toc-caret-cell">
-									<span class="toc-caret-show">&#x25b8;</span><span class="toc-caret-hide">&#x25be;</span>
-								</div>
-								<a href="appendix-2.html" data-scroll="appendix-2">
-									<div class="toc-codenumber-cell"> </div>
-									<div class="toc-title-cell">A repeat appendix</div>
-								</a>
+					<li class="appendix link toc-contains-nested">
+						<div class="toc-line">
+							<div class="toc-caret">
+								<span class="toc-caret-show">▸</span><span class="toc-caret-hide">▾</span>
 							</div>
+							<a data-scroll="appendix-2" href="appendix-2.html"><span class="codenumber"></span> <span
+									class="title">A repeat appendix</span></a>
 						</div>
-						<ul class="toc-nested">
-							<li class="section link">
-								<div class="toc-line-table">
-									<div class="toc-line-row">
-										<div class="toc-caret-cell">
-											<span class="toc-caret-show">&#x25b8;</span><span
-												class="toc-caret-hide">&#x25be;</span>
-										</div>
-										<a href="section-16.html" data-scroll="section-16">
-											<div class="toc-codenumber-cell"> </div>
-											<div class="toc-title-cell">A section</div>
-										</a>
+						<ul>
+							<li class="section link toc-contains-nested">
+								<div class="toc-line">
+									<div class="toc-caret">
+										<span class="toc-caret-show">▸</span><span class="toc-caret-hide">▾</span>
 									</div>
+									<a data-scroll="section-19" href="section-19.html"><span class="codenumber"></span>
+										<span class="title">A section</span></a>
 								</div>
-								<ul class="toc-nested">
-									<li class="subsection link">
-										<div class="toc-line-table">
-											<div class="toc-line-row">
-												<div class="toc-caret-cell">
-													<span class="toc-caret-show">&#x25b8;</span><span
-														class="toc-caret-hide">&#x25be;</span>
-												</div>
-												<a href="section-16.html#subsection-31" data-scroll="subsection-31">
-													<div class="toc-codenumber-cell"> </div>
-													<div class="toc-title-cell">A subsection</div>
-												</a>
+								<ul>
+									<li class="subsection link toc-contains-nested">
+										<div class="toc-line">
+											<div class="toc-caret">
+												<span class="toc-caret-show">▸</span><span class="toc-caret-hide">▾</span>
 											</div>
+											<a data-scroll="subsection-37" href="section-19.html#subsection-37"><span
+													class="codenumber"></span> <span class="title">A subsection</span></a>
 										</div>
-										<ul class="toc-nested">
+										<ul>
 											<li class="subsubsection link">
-												<div class="toc-line-table">
-													<div class="toc-line-row">
-														<div class="toc-caret-cell"> </div>
-														<a href="section-16.html#subsubsection-76"
-															data-scroll="subsubsection-76">
-															<div class="toc-codenumber-cell"> </div>
-															<div class="toc-title-cell">A subsubsection</div>
-														</a>
-													</div>
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-91"
+														href="section-19.html#subsubsection-91"><span
+															class="codenumber"></span> <span class="title">A
+															subsubsection</span></a>
 												</div>
 											</li>
 											<li class="subsubsection link">
-												<div class="toc-line-table">
-													<div class="toc-line-row">
-														<div class="toc-caret-cell"> </div>
-														<a href="section-16.html#subsubsection-77"
-															data-scroll="subsubsection-77">
-															<div class="toc-codenumber-cell"> </div>
-															<div class="toc-title-cell">Another subsubsection</div>
-														</a>
-													</div>
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-92"
+														href="section-19.html#subsubsection-92"><span
+															class="codenumber"></span> <span class="title">Another
+															subsubsection</span></a>
 												</div>
 											</li>
 											<li class="subsubsection link">
-												<div class="toc-line-table">
-													<div class="toc-line-row">
-														<div class="toc-caret-cell"> </div>
-														<a href="section-16.html#subsubsection-78"
-															data-scroll="subsubsection-78">
-															<div class="toc-codenumber-cell"> </div>
-															<div class="toc-title-cell">Yet another subsubsection</div>
-														</a>
-													</div>
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-93"
+														href="section-19.html#subsubsection-93"><span
+															class="codenumber"></span> <span class="title">Yet another
+															subsubsection</span></a>
 												</div>
 											</li>
 										</ul>
 									</li>
-									<li class="subsection link">
-										<div class="toc-line-table">
-											<div class="toc-line-row">
-												<div class="toc-caret-cell">
-													<span class="toc-caret-show">&#x25b8;</span><span
-														class="toc-caret-hide">&#x25be;</span>
-												</div>
-												<a href="section-16.html#subsection-32" data-scroll="subsection-32">
-													<div class="toc-codenumber-cell"> </div>
-													<div class="toc-title-cell">Another subsection</div>
-												</a>
+									<li class="subsection link toc-contains-nested">
+										<div class="toc-line">
+											<div class="toc-caret">
+												<span class="toc-caret-show">▸</span><span class="toc-caret-hide">▾</span>
 											</div>
+											<a data-scroll="subsection-38" href="section-19.html#subsection-38"><span
+													class="codenumber"></span> <span class="title">Another
+													subsection</span></a>
 										</div>
-										<ul class="toc-nested">
+										<ul>
 											<li class="subsubsection link">
-												<div class="toc-line-table">
-													<div class="toc-line-row">
-														<div class="toc-caret-cell"> </div>
-														<a href="section-16.html#subsubsection-79"
-															data-scroll="subsubsection-79">
-															<div class="toc-codenumber-cell"> </div>
-															<div class="toc-title-cell">A subsubsection</div>
-														</a>
-													</div>
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-94"
+														href="section-19.html#subsubsection-94"><span
+															class="codenumber"></span> <span class="title">A
+															subsubsection</span></a>
 												</div>
 											</li>
 											<li class="subsubsection link">
-												<div class="toc-line-table">
-													<div class="toc-line-row">
-														<div class="toc-caret-cell"> </div>
-														<a href="section-16.html#subsubsection-80"
-															data-scroll="subsubsection-80">
-															<div class="toc-codenumber-cell"> </div>
-															<div class="toc-title-cell">Another subsubsection</div>
-														</a>
-													</div>
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-95"
+														href="section-19.html#subsubsection-95"><span
+															class="codenumber"></span> <span class="title">Another
+															subsubsection</span></a>
 												</div>
 											</li>
 											<li class="subsubsection link">
-												<div class="toc-line-table">
-													<div class="toc-line-row">
-														<div class="toc-caret-cell"> </div>
-														<a href="section-16.html#subsubsection-81"
-															data-scroll="subsubsection-81">
-															<div class="toc-codenumber-cell"> </div>
-															<div class="toc-title-cell">Yet another subsubsection</div>
-														</a>
-													</div>
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-96"
+														href="section-19.html#subsubsection-96"><span
+															class="codenumber"></span> <span class="title">Yet another
+															subsubsection</span></a>
 												</div>
 											</li>
 										</ul>
 									</li>
-									<li class="subsection link">
-										<div class="toc-line-table">
-											<div class="toc-line-row">
-												<div class="toc-caret-cell">
-													<span class="toc-caret-show">&#x25b8;</span><span
-														class="toc-caret-hide">&#x25be;</span>
-												</div>
-												<a href="section-16.html#subsection-33" data-scroll="subsection-33">
-													<div class="toc-codenumber-cell"> </div>
-													<div class="toc-title-cell">Yet another subsection</div>
-												</a>
+									<li class="subsection link toc-contains-nested">
+										<div class="toc-line">
+											<div class="toc-caret">
+												<span class="toc-caret-show">▸</span><span class="toc-caret-hide">▾</span>
 											</div>
+											<a data-scroll="subsection-39" href="section-19.html#subsection-39"><span
+													class="codenumber"></span> <span class="title">Yet another
+													subsection</span></a>
 										</div>
-										<ul class="toc-nested">
+										<ul>
 											<li class="subsubsection link">
-												<div class="toc-line-table">
-													<div class="toc-line-row">
-														<div class="toc-caret-cell"> </div>
-														<a href="section-16.html#subsubsection-82"
-															data-scroll="subsubsection-82">
-															<div class="toc-codenumber-cell"> </div>
-															<div class="toc-title-cell">A subsubsection</div>
-														</a>
-													</div>
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-97"
+														href="section-19.html#subsubsection-97"><span
+															class="codenumber"></span> <span class="title">A
+															subsubsection</span></a>
 												</div>
 											</li>
 											<li class="subsubsection link">
-												<div class="toc-line-table">
-													<div class="toc-line-row">
-														<div class="toc-caret-cell"> </div>
-														<a href="section-16.html#subsubsection-83"
-															data-scroll="subsubsection-83">
-															<div class="toc-codenumber-cell"> </div>
-															<div class="toc-title-cell">Another subsubsection</div>
-														</a>
-													</div>
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-98"
+														href="section-19.html#subsubsection-98"><span
+															class="codenumber"></span> <span class="title">Another
+															subsubsection</span></a>
 												</div>
 											</li>
 											<li class="subsubsection link">
-												<div class="toc-line-table">
-													<div class="toc-line-row">
-														<div class="toc-caret-cell"> </div>
-														<a href="section-16.html#subsubsection-84"
-															data-scroll="subsubsection-84">
-															<div class="toc-codenumber-cell"> </div>
-															<div class="toc-title-cell">Yet another subsubsection</div>
-														</a>
-													</div>
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-99"
+														href="section-19.html#subsubsection-99"><span
+															class="codenumber"></span> <span class="title">Yet another
+															subsubsection</span></a>
 												</div>
 											</li>
 										</ul>
 									</li>
 								</ul>
 							</li>
-							<li class="section link">
-								<div class="toc-line-table">
-									<div class="toc-line-row">
-										<div class="toc-caret-cell">
-											<span class="toc-caret-show">&#x25b8;</span><span
-												class="toc-caret-hide">&#x25be;</span>
-										</div>
-										<a href="section-17.html" data-scroll="section-17">
-											<div class="toc-codenumber-cell"> </div>
-											<div class="toc-title-cell">Another section</div>
-										</a>
+							<li class="section link toc-contains-nested">
+								<div class="toc-line">
+									<div class="toc-caret">
+										<span class="toc-caret-show">▸</span><span class="toc-caret-hide">▾</span>
 									</div>
+									<a data-scroll="section-20" href="section-20.html"><span class="codenumber"></span>
+										<span class="title">Another section</span></a>
 								</div>
-								<ul class="toc-nested">
-									<li class="subsection link">
-										<div class="toc-line-table">
-											<div class="toc-line-row">
-												<div class="toc-caret-cell">
-													<span class="toc-caret-show">&#x25b8;</span><span
-														class="toc-caret-hide">&#x25be;</span>
-												</div>
-												<a href="section-17.html#subsection-34" data-scroll="subsection-34">
-													<div class="toc-codenumber-cell"> </div>
-													<div class="toc-title-cell">A subsection</div>
-												</a>
+								<ul>
+									<li class="subsection link toc-contains-nested">
+										<div class="toc-line">
+											<div class="toc-caret">
+												<span class="toc-caret-show">▸</span><span class="toc-caret-hide">▾</span>
 											</div>
+											<a data-scroll="subsection-40" href="section-20.html#subsection-40"><span
+													class="codenumber"></span> <span class="title">A subsection</span></a>
 										</div>
-										<ul class="toc-nested">
+										<ul>
 											<li class="subsubsection link">
-												<div class="toc-line-table">
-													<div class="toc-line-row">
-														<div class="toc-caret-cell"> </div>
-														<a href="section-17.html#subsubsection-85"
-															data-scroll="subsubsection-85">
-															<div class="toc-codenumber-cell"> </div>
-															<div class="toc-title-cell">A subsubsection</div>
-														</a>
-													</div>
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-100"
+														href="section-20.html#subsubsection-100"><span
+															class="codenumber"></span> <span class="title">A
+															subsubsection</span></a>
 												</div>
 											</li>
 											<li class="subsubsection link">
-												<div class="toc-line-table">
-													<div class="toc-line-row">
-														<div class="toc-caret-cell"> </div>
-														<a href="section-17.html#subsubsection-86"
-															data-scroll="subsubsection-86">
-															<div class="toc-codenumber-cell"> </div>
-															<div class="toc-title-cell">Another subsubsection</div>
-														</a>
-													</div>
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-101"
+														href="section-20.html#subsubsection-101"><span
+															class="codenumber"></span> <span class="title">Another
+															subsubsection</span></a>
 												</div>
 											</li>
 											<li class="subsubsection link">
-												<div class="toc-line-table">
-													<div class="toc-line-row">
-														<div class="toc-caret-cell"> </div>
-														<a href="section-17.html#subsubsection-87"
-															data-scroll="subsubsection-87">
-															<div class="toc-codenumber-cell"> </div>
-															<div class="toc-title-cell">Yet another subsubsection</div>
-														</a>
-													</div>
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-102"
+														href="section-20.html#subsubsection-102"><span
+															class="codenumber"></span> <span class="title">Yet another
+															subsubsection</span></a>
+												</div>
+											</li>
+										</ul>
+									</li>
+									<li class="subsection link toc-contains-nested">
+										<div class="toc-line">
+											<div class="toc-caret">
+												<span class="toc-caret-show">▸</span><span class="toc-caret-hide">▾</span>
+											</div>
+											<a data-scroll="subsection-41" href="section-20.html#subsection-41"><span
+													class="codenumber"></span> <span class="title">Another
+													subsection</span></a>
+										</div>
+										<ul>
+											<li class="subsubsection link">
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-103"
+														href="section-20.html#subsubsection-103"><span
+															class="codenumber"></span> <span class="title">A
+															subsubsection</span></a>
+												</div>
+											</li>
+											<li class="subsubsection link">
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-104"
+														href="section-20.html#subsubsection-104"><span
+															class="codenumber"></span> <span class="title">Another
+															subsubsection</span></a>
+												</div>
+											</li>
+											<li class="subsubsection link">
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-105"
+														href="section-20.html#subsubsection-105"><span
+															class="codenumber"></span> <span class="title">Yet another
+															subsubsection</span></a>
 												</div>
 											</li>
 										</ul>
 									</li>
 									<li class="subsection link">
-										<div class="toc-line-table">
-											<div class="toc-line-row">
-												<div class="toc-caret-cell">
-													<span class="toc-caret-show">&#x25b8;</span><span
-														class="toc-caret-hide">&#x25be;</span>
-												</div>
-												<a href="section-17.html#subsection-35" data-scroll="subsection-35">
-													<div class="toc-codenumber-cell"> </div>
-													<div class="toc-title-cell">Another subsection</div>
-												</a>
-											</div>
-										</div>
-										<ul class="toc-nested">
-											<li class="subsubsection link">
-												<div class="toc-line-table">
-													<div class="toc-line-row">
-														<div class="toc-caret-cell"> </div>
-														<a href="section-17.html#subsubsection-88"
-															data-scroll="subsubsection-88">
-															<div class="toc-codenumber-cell"> </div>
-															<div class="toc-title-cell">A subsubsection</div>
-														</a>
-													</div>
-												</div>
-											</li>
-											<li class="subsubsection link">
-												<div class="toc-line-table">
-													<div class="toc-line-row">
-														<div class="toc-caret-cell"> </div>
-														<a href="section-17.html#subsubsection-89"
-															data-scroll="subsubsection-89">
-															<div class="toc-codenumber-cell"> </div>
-															<div class="toc-title-cell">Another subsubsection</div>
-														</a>
-													</div>
-												</div>
-											</li>
-											<li class="subsubsection link">
-												<div class="toc-line-table">
-													<div class="toc-line-row">
-														<div class="toc-caret-cell"> </div>
-														<a href="section-17.html#subsubsection-90"
-															data-scroll="subsubsection-90">
-															<div class="toc-codenumber-cell"> </div>
-															<div class="toc-title-cell">Yet another subsubsection</div>
-														</a>
-													</div>
-												</div>
-											</li>
-										</ul>
-									</li>
-									<li class="subsection link">
-										<div class="toc-line-table">
-											<div class="toc-line-row">
-												<div class="toc-caret-cell"> </div>
-												<a href="section-17.html#subsection-36" data-scroll="subsection-36">
-													<div class="toc-codenumber-cell"> </div>
-													<div class="toc-title-cell">A subsection with no subsubsections</div>
-												</a>
-											</div>
+										<div class="toc-line">
+											<div class="toc-caret toc-blank-caret"></div>
+											<a data-scroll="subsection-42" href="section-20.html#subsection-42"><span
+													class="codenumber"></span> <span class="title">A subsection with no
+													subsubsections</span></a>
 										</div>
 									</li>
 								</ul>
 							</li>
 							<li class="section link">
-								<div class="toc-line-table">
-									<div class="toc-line-row">
-										<div class="toc-caret-cell"> </div>
-										<a href="section-18.html" data-scroll="section-18">
-											<div class="toc-codenumber-cell"> </div>
-											<div class="toc-title-cell">A section with no subsections</div>
-										</a>
-									</div>
+								<div class="toc-line">
+									<div class="toc-caret toc-blank-caret"></div>
+									<a data-scroll="section-21" href="section-21.html"><span class="codenumber"></span>
+										<span class="title">A section with no subsections</span></a>
 								</div>
 							</li>
 						</ul>
 					</li>
 					<li class="appendix link">
-						<div class="toc-line-table">
-							<div class="toc-line-row">
-								<div class="toc-caret-cell"> </div>
-								<a href="appendix-3.html" data-scroll="appendix-3">
-									<div class="toc-codenumber-cell"> </div>
-									<div class="toc-title-cell">An appendix with no sections</div>
-								</a>
-							</div>
+						<div class="toc-line">
+							<div class="toc-caret toc-blank-caret"></div>
+							<a data-scroll="appendix-3" href="appendix-3.html"><span class="codenumber"></span> <span
+									class="title">An appendix with no sections</span></a>
 						</div>
+					</li>
+					<li class="appendix last-appendix link toc-contains-nested">
+						<div class="toc-line">
+							<div class="toc-caret">
+								<span class="toc-caret-show">▸</span><span class="toc-caret-hide">▾</span>
+							</div>
+							<a data-scroll="appendix-4" href="appendix-4.html"><span class="codenumber"></span> <span
+									class="title">Another repeat appendix</span></a>
+						</div>
+						<ul>
+							<li class="section link toc-contains-nested">
+								<div class="toc-line">
+									<div class="toc-caret">
+										<span class="toc-caret-show">▸</span><span class="toc-caret-hide">▾</span>
+									</div>
+									<a data-scroll="section-22" href="section-22.html"><span class="codenumber"></span>
+										<span class="title">A section</span></a>
+								</div>
+								<ul>
+									<li class="subsection link toc-contains-nested">
+										<div class="toc-line">
+											<div class="toc-caret">
+												<span class="toc-caret-show">▸</span><span class="toc-caret-hide">▾</span>
+											</div>
+											<a data-scroll="subsection-43" href="section-22.html#subsection-43"><span
+													class="codenumber"></span> <span class="title">A subsection</span></a>
+										</div>
+										<ul>
+											<li class="subsubsection link">
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-106"
+														href="section-22.html#subsubsection-106"><span
+															class="codenumber"></span> <span class="title">A
+															subsubsection</span></a>
+												</div>
+											</li>
+											<li class="subsubsection link">
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-107"
+														href="section-22.html#subsubsection-107"><span
+															class="codenumber"></span> <span class="title">Another
+															subsubsection</span></a>
+												</div>
+											</li>
+											<li class="subsubsection link">
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-108"
+														href="section-22.html#subsubsection-108"><span
+															class="codenumber"></span> <span class="title">Yet another
+															subsubsection</span></a>
+												</div>
+											</li>
+										</ul>
+									</li>
+									<li class="subsection link toc-contains-nested">
+										<div class="toc-line">
+											<div class="toc-caret">
+												<span class="toc-caret-show">▸</span><span class="toc-caret-hide">▾</span>
+											</div>
+											<a data-scroll="subsection-44" href="section-22.html#subsection-44"><span
+													class="codenumber"></span> <span class="title">Another
+													subsection</span></a>
+										</div>
+										<ul>
+											<li class="subsubsection link">
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-109"
+														href="section-22.html#subsubsection-109"><span
+															class="codenumber"></span> <span class="title">A
+															subsubsection</span></a>
+												</div>
+											</li>
+											<li class="subsubsection link">
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-110"
+														href="section-22.html#subsubsection-110"><span
+															class="codenumber"></span> <span class="title">Another
+															subsubsection</span></a>
+												</div>
+											</li>
+											<li class="subsubsection link">
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-111"
+														href="section-22.html#subsubsection-111"><span
+															class="codenumber"></span> <span class="title">Yet another
+															subsubsection</span></a>
+												</div>
+											</li>
+										</ul>
+									</li>
+									<li class="subsection link toc-contains-nested">
+										<div class="toc-line">
+											<div class="toc-caret">
+												<span class="toc-caret-show">▸</span><span class="toc-caret-hide">▾</span>
+											</div>
+											<a data-scroll="subsection-45" href="section-22.html#subsection-45"><span
+													class="codenumber"></span> <span class="title">Yet another
+													subsection</span></a>
+										</div>
+										<ul>
+											<li class="subsubsection link">
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-112"
+														href="section-22.html#subsubsection-112"><span
+															class="codenumber"></span> <span class="title">A
+															subsubsection</span></a>
+												</div>
+											</li>
+											<li class="subsubsection link">
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-113"
+														href="section-22.html#subsubsection-113"><span
+															class="codenumber"></span> <span class="title">Another
+															subsubsection</span></a>
+												</div>
+											</li>
+											<li class="subsubsection link">
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-114"
+														href="section-22.html#subsubsection-114"><span
+															class="codenumber"></span> <span class="title">Yet another
+															subsubsection</span></a>
+												</div>
+											</li>
+										</ul>
+									</li>
+								</ul>
+							</li>
+							<li class="section link toc-contains-nested">
+								<div class="toc-line">
+									<div class="toc-caret">
+										<span class="toc-caret-show">▸</span><span class="toc-caret-hide">▾</span>
+									</div>
+									<a data-scroll="section-23" href="section-23.html"><span class="codenumber"></span>
+										<span class="title">Another section</span></a>
+								</div>
+								<ul>
+									<li class="subsection link toc-contains-nested">
+										<div class="toc-line">
+											<div class="toc-caret">
+												<span class="toc-caret-show">▸</span><span class="toc-caret-hide">▾</span>
+											</div>
+											<a data-scroll="subsection-46" href="section-23.html#subsection-46"><span
+													class="codenumber"></span> <span class="title">A subsection</span></a>
+										</div>
+										<ul>
+											<li class="subsubsection link">
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-115"
+														href="section-23.html#subsubsection-115"><span
+															class="codenumber"></span> <span class="title">A
+															subsubsection</span></a>
+												</div>
+											</li>
+											<li class="subsubsection link">
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-116"
+														href="section-23.html#subsubsection-116"><span
+															class="codenumber"></span> <span class="title">Another
+															subsubsection</span></a>
+												</div>
+											</li>
+											<li class="subsubsection link">
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-117"
+														href="section-23.html#subsubsection-117"><span
+															class="codenumber"></span> <span class="title">Yet another
+															subsubsection</span></a>
+												</div>
+											</li>
+										</ul>
+									</li>
+									<li class="subsection link toc-contains-nested">
+										<div class="toc-line">
+											<div class="toc-caret">
+												<span class="toc-caret-show">▸</span><span class="toc-caret-hide">▾</span>
+											</div>
+											<a data-scroll="subsection-47" href="section-23.html#subsection-47"><span
+													class="codenumber"></span> <span class="title">Another
+													subsection</span></a>
+										</div>
+										<ul>
+											<li class="subsubsection link">
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-118"
+														href="section-23.html#subsubsection-118"><span
+															class="codenumber"></span> <span class="title">A
+															subsubsection</span></a>
+												</div>
+											</li>
+											<li class="subsubsection link">
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-119"
+														href="section-23.html#subsubsection-119"><span
+															class="codenumber"></span> <span class="title">Another
+															subsubsection</span></a>
+												</div>
+											</li>
+											<li class="subsubsection link">
+												<div class="toc-line">
+													<div class="toc-caret toc-blank-caret"></div>
+													<a data-scroll="subsubsection-120"
+														href="section-23.html#subsubsection-120"><span
+															class="codenumber"></span> <span class="title">Yet another
+															subsubsection</span></a>
+												</div>
+											</li>
+										</ul>
+									</li>
+									<li class="subsection link">
+										<div class="toc-line">
+											<div class="toc-caret toc-blank-caret"></div>
+											<a data-scroll="subsection-48" href="section-23.html#subsection-48"><span
+													class="codenumber"></span> <span class="title">A subsection with no
+													subsubsections</span></a>
+										</div>
+									</li>
+								</ul>
+							</li>
+							<li class="section link">
+								<div class="toc-line">
+									<div class="toc-caret toc-blank-caret"></div>
+									<a data-scroll="section-24" href="section-24.html"><span class="codenumber"></span>
+										<span class="title">A section with no subsections</span></a>
+								</div>
+							</li>
+						</ul>
 					</li>
 					<li class="references link">
-						<div class="toc-line-table">
-							<div class="toc-line-row">
-								<div class="toc-caret-cell"> </div>
-								<a href="references-1.html" data-scroll="references-1">
-									<div class="toc-codenumber-cell"> </div>
-									<div class="toc-title-cell">Bibliography</div>
-								</a>
-							</div>
+						<div class="toc-line">
+							<div class="toc-caret toc-blank-caret"></div>
+							<a data-scroll="references-1" href="references-1.html"><span class="codenumber"></span> <span
+									class="title">Bibliography</span></a>
 						</div>
 					</li>
 					<li class="index link">
-						<div class="toc-line-table">
-							<div class="toc-line-row">
-								<div class="toc-caret-cell"> </div>
-								<a href="index-of-nomenclature.html" data-scroll="index-of-nomenclature">
-									<div class="toc-codenumber-cell"> </div>
-									<div class="toc-title-cell">Index</div>
-								</a>
-							</div>
+						<div class="toc-line">
+							<div class="toc-caret toc-blank-caret"></div>
+							<a data-scroll="index-of-nomenclature" href="index-of-nomenclature.html"><span
+									class="codenumber"></span> <span class="title">Index</span></a>
 						</div>
 					</li>
 					<li class="colophon link">
-						<div class="toc-line-table">
-							<div class="toc-line-row">
-								<div class="toc-caret-cell"> </div>
-								<a href="back-colophon.html" data-scroll="back-colophon">
-									<div class="toc-codenumber-cell"> </div>
-									<div class="toc-title-cell">Colophon</div>
-								</a>
-							</div>
+						<div class="toc-line">
+							<div class="toc-caret toc-blank-caret"></div>
+							<a data-scroll="back-colophon" href="back-colophon.html"><span class="codenumber"></span> <span
+									class="title">Colophon</span></a>
 						</div>
 					</li>
 				</ul>
 			</li>
 			<script>
-				var toc_toggler = document.getElementsByClassName("toc-caret-cell");
+				var toc_toggler = document.getElementsByClassName("toc-caret");
 				for (var i = 0; i < toc_toggler.length; i++) {
+					if (toc_toggler[i].classList.contains("toc-blank-caret")) {
+						continue;
+					}
 					toc_toggler[i].addEventListener("click", function () {
-						this.parentElement.parentElement.parentElement.querySelector(".toc-nested").classList.toggle("toc-nested-show");
+						this.parentElement.parentElement.classList.toggle("toc-nested-shown");
 						var children = this.children;
 						for (var j = 0; j < children.length; j++) {
 							children[j].classList.toggle("toc-caret-show");

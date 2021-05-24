@@ -10789,33 +10789,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="*" mode="toc-items">
     <!-- Subtree for page this sidebar will adorn -->
     <xsl:variable name="this-page-node" select="self::*" />
+    <xsl:variable name="b-toc-expands" select="boolean($html-toc-expandlevel &lt; $toc-level)" />
     <xsl:for-each select="$root/book/*">  <!-- TODO add $root/article/* -->
         <xsl:apply-templates select="." mode="toc-item">
             <xsl:with-param name="this-page-node" select="$this-page-node" />
             <xsl:with-param name="depth" select="1" />
+            <xsl:with-param name="b-toc-expands" select="$b-toc-expands" />
         </xsl:apply-templates>
     </xsl:for-each>
-    <xsl:if test="$html-toc-expandlevel &lt; $toc-level">
-        <script>
-            <xsl:text>&#xa;</xsl:text>
-            <xsl:text>var toc_toggler = document.getElementsByClassName("toc-caret-cell");&#xa;</xsl:text>
-            <xsl:text>for (var i = 0; i &lt; toc_toggler.length; i++) {&#xa;</xsl:text>
-            <xsl:text>toc_toggler[i].addEventListener("click", function() {&#xa;</xsl:text>
-            <xsl:text>this.parentElement.parentElement.parentElement.querySelector(".toc-nested").classList.toggle("toc-nested-show");&#xa;</xsl:text>
-            <xsl:text>var children = this.children;&#xa;</xsl:text>
-            <xsl:text>for (var j = 0; j &lt; children.length; j++) {&#xa;</xsl:text>
-            <xsl:text>children[j].classList.toggle("toc-caret-show");&#xa;</xsl:text>
-            <xsl:text>children[j].classList.toggle("toc-caret-hide");&#xa;</xsl:text>
-            <xsl:text>}&#xa;</xsl:text>
-            <xsl:text>});&#xa;</xsl:text>
-            <xsl:text>}&#xa;</xsl:text>
-        </script>
-    </xsl:if>
 </xsl:template>
 
 <xsl:template match="*" mode="toc-item">
     <xsl:param name = "this-page-node" />
     <xsl:param name = "depth" />
+    <xsl:param name = "b-toc-expands" />
     <xsl:variable name="structural">
         <xsl:apply-templates select="." mode="is-structural" />
     </xsl:variable>
@@ -10824,6 +10811,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="toc-item-content">
             <xsl:with-param name="this-page-node" select="$this-page-node" />
             <xsl:with-param name="depth" select="$depth" />
+            <xsl:with-param name="b-toc-expands" select="$b-toc-expands" />
         </xsl:apply-templates>
     </xsl:if>
 </xsl:template>
@@ -10831,6 +10819,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="*" mode="toc-item-content">
     <xsl:param name = "this-page-node" />
     <xsl:param name = "depth" />
+    <xsl:param name = "b-toc-expands" />
     <xsl:variable name="adjusted-depth">
         <xsl:choose>
             <xsl:when test="not($parts = 'absent') and local-name() = 'frontmatter'">
@@ -10842,95 +10831,86 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:choose>
     </xsl:variable>
     <xsl:variable name="this-subtree" select="./descendant::*" />
-    <xsl:variable name="in-this-subtree" select="count($this-page-node|$this-subtree) = count($this-subtree)" />
+    <xsl:variable name="b-in-this-subtree" select="boolean(count($this-page-node|$this-subtree) = count($this-subtree))" />
     <xsl:variable name="on-a-leaf">
         <xsl:apply-templates select="." mode="is-leaf" />
     </xsl:variable>
+    <xsl:variable name="b-contains-sublist" select="boolean($on-a-leaf='false' and $toc-level &gt; $adjusted-depth)" />
+    <xsl:variable name="b-can-expand" select="boolean($b-contains-sublist and $html-toc-expandlevel &lt;= $adjusted-depth)" />
     <xsl:element name="li">
         <xsl:attribute name="class">
             <xsl:value-of select ="local-name()"/>
+            <xsl:if test="local-name() = 'appendix' and count(./following-sibling::appendix) = 0">
+                <xsl:text> last-appendix</xsl:text>
+            </xsl:if>
             <xsl:text> link</xsl:text>
             <xsl:if test="count($this-page-node|./self::*) = 1">
                 <xsl:text> active</xsl:text>
             </xsl:if>
+            <xsl:if test="$b-contains-sublist">
+                <xsl:text> toc-contains-nested</xsl:text>
+                <xsl:if test="not($b-can-expand) or $b-in-this-subtree">
+                    <xsl:text> toc-nested-shown</xsl:text>
+                </xsl:if>
+            </xsl:if>
         </xsl:attribute>
-        <div class="toc-line-table">
-            <div class="toc-line-row">
-                <div class="toc-caret-cell">
-                    <xsl:choose>
-                        <xsl:when test="$on-a-leaf='false' and $toc-level &gt; $adjusted-depth and $html-toc-expandlevel &lt;= $adjusted-depth">
-                            <span class="toc-caret-show">
-                                <xsl:call-template name="toc-item-caret">
-                                    <xsl:with-param name="b-in-subtree" select="$in-this-subtree" />
-                                </xsl:call-template>
-                            </span>
-                            <span class="toc-caret-hide">
-                                <xsl:call-template name="toc-item-caret">
-                                    <xsl:with-param name="b-in-subtree" select="not($in-this-subtree)" />
-                                </xsl:call-template>
-                            </span>
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <xsl:text> </xsl:text>
-                        </xsl:otherwise>
-                    </xsl:choose>
-                </div>
-                <!-- From                                                                            -->
-                <!-- https://html.spec.whatwg.org/multipage/text-level-semantics.html#the-a-element  -->
-                <!-- "The a element can be wrapped around entire paragraphs, lists, tables, and so   -->
-                <!--  forth, even entire sections, so long as there is no interactive content within -->
-                <!--  (e.g., buttons or other links)."                                               -->
-                <xsl:element name="a">
-                    <xsl:attribute name="href">
-                        <xsl:apply-templates select="." mode="url"/>
-                    </xsl:attribute>
-                    <xsl:attribute name="data-scroll">
-                        <xsl:apply-templates select="." mode="html-id" />
-                    </xsl:attribute>
-                    <div class="toc-codenumber-cell">
-                        <xsl:variable name="toc-item-codenum">
-                            <!-- TODO will the test below work the way I want it to? -->
-                            <xsl:for-each select="self::part|self::chapter|$root/article/*[count(.|self::section)=1]">
-                                <xsl:variable name="num">
-                                    <xsl:apply-templates select="." mode="number" />
-                                </xsl:variable>
-                                <xsl:if test="$num!=''">
-                                    <xsl:value-of select="$num" />
-                                </xsl:if>
-                            </xsl:for-each>
-                        </xsl:variable>
-                        <xsl:choose>
-                            <xsl:when test="$toc-item-codenum!=''">
-                                <xsl:value-of select="$toc-item-codenum" />
-                            </xsl:when>
-                            <xsl:otherwise>
-                                <xsl:text> </xsl:text>
-                            </xsl:otherwise>
-                        </xsl:choose>
-                    </div>
-                    <div class="toc-title-cell">
-                        <xsl:apply-templates select="." mode="title-short" />
-                    </div>
-                </xsl:element>
-            </div>
-        </div>
-        <xsl:if test="$on-a-leaf='false' and $toc-level &gt; $adjusted-depth">
-            <xsl:element name="ul">
-                <xsl:if test="$html-toc-expandlevel &lt;= $adjusted-depth">
+        <div class="toc-line">
+            <xsl:if test="$b-toc-expands">
+                <xsl:element name="div">
                     <xsl:attribute name="class">
-                        <xsl:text>toc-nested</xsl:text>
-                        <xsl:if test="$in-this-subtree='true'">
-                            <xsl:text> toc-nested-show</xsl:text>
+                        <xsl:text>toc-caret</xsl:text>
+                        <xsl:if test="not($b-can-expand)">
+                            <xsl:text> toc-blank-caret</xsl:text>
                         </xsl:if>
                     </xsl:attribute>
-                </xsl:if>
+                    <xsl:if test="$b-can-expand">
+                        <span class="toc-caret-show">
+                            <xsl:call-template name="toc-item-caret">
+                                <xsl:with-param name="b-in-subtree" select="$b-in-this-subtree" />
+                            </xsl:call-template>
+                        </span>
+                        <span class="toc-caret-hide">
+                            <xsl:call-template name="toc-item-caret">
+                                <xsl:with-param name="b-in-subtree" select="not($b-in-this-subtree)" />
+                            </xsl:call-template>
+                        </span>
+                    </xsl:if>
+                </xsl:element>
+            </xsl:if>
+            <xsl:element name="a">
+                <xsl:attribute name="href">
+                    <xsl:apply-templates select="." mode="url"/>
+                </xsl:attribute>
+                <xsl:attribute name="data-scroll">
+                    <xsl:apply-templates select="." mode="html-id" />
+                </xsl:attribute>
+                <span class="codenumber">
+                    <!-- TODO will the test below work the way I want it to? -->
+                    <xsl:for-each select="self::part|self::chapter|$root/article/*[count(.|self::section)=1]">
+                        <xsl:variable name="num">
+                            <xsl:apply-templates select="." mode="number" />
+                        </xsl:variable>
+                        <xsl:if test="$num!=''">
+                            <xsl:value-of select="$num" />
+                        </xsl:if>
+                    </xsl:for-each>
+                </span>
+                <xsl:text> </xsl:text>
+                <span class="title">
+                    <xsl:apply-templates select="." mode="title-short" />
+                </span>
+            </xsl:element>
+        </div>
+        <xsl:if test="$b-contains-sublist">
+            <ul>
                 <xsl:for-each select="./*">
                     <xsl:apply-templates select="." mode="toc-item">
                         <xsl:with-param name="this-page-node" select="$this-page-node" />
                         <xsl:with-param name="depth" select="$adjusted-depth + 1" />
+                        <xsl:with-param name="b-toc-expands" select="$b-toc-expands" />
                     </xsl:apply-templates>
                 </xsl:for-each>
-            </xsl:element>
+            </ul>
         </xsl:if>
     </xsl:element>
 </xsl:template>

@@ -16,6 +16,7 @@ then
 fi
 
 cp expand.css build/html/developer.css
+cp expand.js build/html/expand.js
 
 ${HOME}/local/src/git/forks/pretext/mathbook/pretext/pretext \
   --verbose \
@@ -25,3 +26,9 @@ ${HOME}/local/src/git/forks/pretext/mathbook/pretext/pretext \
   --directory build/html \
   ${1}.xml
 
+sed -i \
+  -e 's/<link.*toc_default\.css.*>/<!-- & -->/' \
+  -e 's/<link.*colors_default\.css.*>/<!-- & -->/' \
+  -e 's/<link.*setcolors\.css.*>/<!-- & -->/' \
+  -e 's/<\/head>/<script src="expand.js"><\/script>\n&/' \
+  build/html/*.html

@@ -415,6 +415,98 @@
 		<title>A chapter with no sections</title>
 		<p> Blank. </p>
 	</chapter>
+	<chapter>
+		<title>A repeat chapter</title>
+		<section>
+			<title>A section</title>
+			<subsection>
+				<title>A subsection</title>
+				<subsubsection>
+					<title>A subsubsection</title>
+					<p>Blank.</p>
+				</subsubsection>
+				<subsubsection>
+					<title>Another subsubsection</title>
+					<p>Blank.</p>
+				</subsubsection>
+				<subsubsection>
+					<title>Yet another subsubsection</title>
+					<p>Blank.</p>
+				</subsubsection>
+			</subsection>
+			<subsection>
+				<title>Another subsection</title>
+				<subsubsection>
+					<title>A subsubsection</title>
+					<p>Blank.</p>
+				</subsubsection>
+				<subsubsection>
+					<title>Another subsubsection</title>
+					<p>Blank.</p>
+				</subsubsection>
+				<subsubsection>
+					<title>Yet another subsubsection</title>
+					<p>Blank.</p>
+				</subsubsection>
+			</subsection>
+			<subsection>
+				<title>Yet another subsection</title>
+				<subsubsection>
+					<title>A subsubsection</title>
+					<p>Blank.</p>
+				</subsubsection>
+				<subsubsection>
+					<title>Another subsubsection</title>
+					<p>Blank.</p>
+				</subsubsection>
+				<subsubsection>
+					<title>Yet another subsubsection</title>
+					<p>Blank.</p>
+				</subsubsection>
+			</subsection>
+		</section>
+		<section>
+			<title>Another section</title>
+			<subsection>
+				<title>A subsection</title>
+				<subsubsection>
+					<title>A subsubsection</title>
+					<p>Blank.</p>
+				</subsubsection>
+				<subsubsection>
+					<title>Another subsubsection</title>
+					<p>Blank.</p>
+				</subsubsection>
+				<subsubsection>
+					<title>Yet another subsubsection</title>
+					<p>Blank.</p>
+				</subsubsection>
+			</subsection>
+			<subsection>
+				<title>Another subsection</title>
+				<subsubsection>
+					<title>A subsubsection</title>
+					<p>Blank.</p>
+				</subsubsection>
+				<subsubsection>
+					<title>Another subsubsection</title>
+					<p>Blank.</p>
+				</subsubsection>
+				<subsubsection>
+					<title>Yet another subsubsection</title>
+					<p>Blank.</p>
+				</subsubsection>
+			</subsection>
+			<subsection>
+				<title>A subsection with no subsubsections</title>
+				<p>Blank.</p>
+			</subsection>
+		</section>
+		<section>
+			<title>A section with no subsections</title>
+			<p> Hi. </p>
+		</section>
+	</chapter>
 </part>
 
 <backmatter>
@@ -607,6 +699,98 @@
 	<appendix>
 		<title>An appendix with no sections</title>
 		<p> Blank. </p>
+	</appendix>
+	<appendix>
+		<title>Another repeat appendix</title>
+		<section>
+			<title>A section</title>
+			<subsection>
+				<title>A subsection</title>
+				<subsubsection>
+					<title>A subsubsection</title>
+					<p>Blank.</p>
+				</subsubsection>
+				<subsubsection>
+					<title>Another subsubsection</title>
+					<p>Blank.</p>
+				</subsubsection>
+				<subsubsection>
+					<title>Yet another subsubsection</title>
+					<p>Blank.</p>
+				</subsubsection>
+			</subsection>
+			<subsection>
+				<title>Another subsection</title>
+				<subsubsection>
+					<title>A subsubsection</title>
+					<p>Blank.</p>
+				</subsubsection>
+				<subsubsection>
+					<title>Another subsubsection</title>
+					<p>Blank.</p>
+				</subsubsection>
+				<subsubsection>
+					<title>Yet another subsubsection</title>
+					<p>Blank.</p>
+				</subsubsection>
+			</subsection>
+			<subsection>
+				<title>Yet another subsection</title>
+				<subsubsection>
+					<title>A subsubsection</title>
+					<p>Blank.</p>
+				</subsubsection>
+				<subsubsection>
+					<title>Another subsubsection</title>
+					<p>Blank.</p>
+				</subsubsection>
+				<subsubsection>
+					<title>Yet another subsubsection</title>
+					<p>Blank.</p>
+				</subsubsection>
+			</subsection>
+		</section>
+		<section>
+			<title>Another section</title>
+			<subsection>
+				<title>A subsection</title>
+				<subsubsection>
+					<title>A subsubsection</title>
+					<p>Blank.</p>
+				</subsubsection>
+				<subsubsection>
+					<title>Another subsubsection</title>
+					<p>Blank.</p>
+				</subsubsection>
+				<subsubsection>
+					<title>Yet another subsubsection</title>
+					<p>Blank.</p>
+				</subsubsection>
+			</subsection>
+			<subsection>
+				<title>Another subsection</title>
+				<subsubsection>
+					<title>A subsubsection</title>
+					<p>Blank.</p>
+				</subsubsection>
+				<subsubsection>
+					<title>Another subsubsection</title>
+					<p>Blank.</p>
+				</subsubsection>
+				<subsubsection>
+					<title>Yet another subsubsection</title>
+					<p>Blank.</p>
+				</subsubsection>
+			</subsection>
+			<subsection>
+				<title>A subsection with no subsubsections</title>
+				<p>Blank.</p>
+			</subsection>
+		</section>
+		<section>
+			<title>A section with no subsections</title>
+			<p> Hi. </p>
+		</section>
 	</appendix>
 
 	<references>

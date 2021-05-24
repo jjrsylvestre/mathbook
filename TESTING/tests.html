@@ -15,6 +15,7 @@ ul {
 
 .toc-caret {
 	flex-grow: 0;
+	min-width: 1em;
 }
 
 .toc-caret-hide {
@@ -24,12 +25,11 @@ ul {
 .toc-caret-show,
 .toc-codenumber {
     display: inline-block;
-	width: 2em;
 }
 
-.toc-codenumber {
+/* .toc-codenumber {
 	position: relative;
-}
+} */
 
 li {
 	background-color: red;
@@ -39,26 +39,26 @@ li {
 	padding-left: 0.2em;
 	display: flex;
 	flex-wrap: nowrap;
+	border: 1px solid black;
 }
 
 li > a {
 	flex-grow: 1;
+	display: flex;
 }
 
 li:hover {
 	background-color: purple;
 }
 
-.toc-title-cell {
-	display: flex;
+.toc-codenumber {
+	min-width: 1.5em;
+	padding-right: 0.5em;
+	text-align: center;
 }
 
-.toc-codenumber,
-.toc-title {
-	flex-grow: 1;
-}
-
-</style></head>
+</style><script src="expand.js"></script>
+</head>
 
 <body>
 <ul>
@@ -68,19 +68,29 @@ li:hover {
 			<span class="toc-caret-hide">&#x25be;</span>
 		</div>
 		<a href="part-1.html" data-scroll="part-1">
-			<div class="toc-title-cell">
-				<span class="toc-codenumber">I</span>
-				<span class="toc-title">A part with a super long title it just keeps going and going and hey what do you know we are still going</span>
-			</div>
+			<span class="toc-codenumber">I</span>
+			<span class="toc-title">A part with a super long title it just keeps going and going and hey what do you know we are still going</span>
+		</a>
+	</li>
+	<li>
+		<div class="toc-caret"></div>
+		<a href="part-1.html" data-scroll="part-1">
+			<span class="toc-codenumber"></span>
+			<span class="toc-title">A part with a super long title it just keeps going and going and hey what do you know we are still going</span>
 		</a>
 	</li>
 	<li>
 		<div class="toc-caret"> </div>
 		<a href="part-1.html" data-scroll="part-1">
-			<div class="toc-title-cell">
-				<span class="toc-codenumber">&nbsp;</span>
-				<span class="toc-title">A part with a super long title it just keeps going and going and hey what do you know we are still going</span>
-			</div>
+			<span class="toc-codenumber">88</span>
+			<span class="toc-title">A part with a super long title it just keeps going and going and hey what do you know we are still going</span>
+		</a>
+	</li>
+	<li>
+		<div class="toc-caret"> </div>
+		<a href="part-1.html" data-scroll="part-1">
+			<span class="toc-codenumber">XVI</span>
+			<span class="toc-title">A part with a super long title it just keeps going and going and hey what do you know we are still going</span>
 		</a>
 	</li>
 </ul>
