@@ -14,7 +14,8 @@
 
 	--chaptertoc: #3572a0;
 	--chaptertoctext: white;
-	--chaptertocactive: var(--documenttitle);   /* often the same as documenttitle */
+	/* --chaptertocactive: var(--documenttitle); */  /* often the same as documenttitle */
+	--chaptertocactive: var(--chaptertoc);  /* stock pretext css doesn't highlight active chapters */
 	--chaptertoctextactive: white;
 	--sectiontoc: white;   /* can also write it as #ffffff  */
 	--sectiontoctext: #662211;
@@ -88,6 +89,34 @@
 #toc div.toc-line > a {
 	flex-grow: 1;
 	display: flex;
+	padding-top: 2.86957px;
+	padding-bottom: 2.86957px;
+}
+
+#toc .book :is(
+	.frontmatter,
+	.part,
+	.backmatter
+) > div.toc-line > a {
+	font-size: 110%;
+	padding-top: 7px;
+	padding-bottom: 7px;
+}
+
+#toc .toc-caret {
+	padding-top: 2.86957px;
+	padding-bottom: 2.86957px;
+	text-align: center;
+}
+
+#toc .book :is(
+	.frontmatter,
+	.part,
+	.backmatter
+) > div.toc-line > div.toc-caret {
+	font-size: 110%;
+	padding-top: 7px;
+	padding-bottom: 7px;
 }
 
 #toc .toc-contains-nested > ul {
@@ -114,7 +143,7 @@
 
 #toc div.toc-caret {
 	width: 1em;
-	margin-left: 0.2em;
+	/* margin-left: 0.2em; */
 	flex-grow: 0;
 	min-width: 1em;
 }
@@ -135,14 +164,13 @@
 	font-family: "PT Serif", "Times New Roman", Times, serif;
 }
 
-#toc .book :is(
+/* #toc .book :is(
 	.frontmatter,
 	.part,
 	.backmatter
-) > div > a {
-
+) > div.toc-line > a {
 	font-size: 110%;
-}
+} */
 
 #toc .book .section,
 #toc .book .frontmatter :is(

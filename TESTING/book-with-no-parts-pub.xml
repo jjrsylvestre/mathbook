@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<publication>
+
+    <common>
+        <tableofcontents level="4" />
+    </common>
+
+    <html>
+        <!-- <css style="default" colors="blue_red"/> -->
+        <tableofcontents expandlevel="2" />
+    </html>
+
+</publication>

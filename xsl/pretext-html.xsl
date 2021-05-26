@@ -10837,6 +10837,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:variable>
     <xsl:variable name="b-contains-sublist" select="boolean($on-a-leaf='false' and $toc-level &gt; $adjusted-depth)" />
     <xsl:variable name="b-can-expand" select="boolean($b-contains-sublist and $html-toc-expandlevel &lt;= $adjusted-depth)" />
+    <xsl:variable name="b-active" select="boolean(count($this-page-node|./self::*) = 1)" />
     <xsl:element name="li">
         <xsl:attribute name="class">
             <xsl:value-of select ="local-name()"/>
@@ -10844,12 +10845,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:text> last-appendix</xsl:text>
             </xsl:if>
             <xsl:text> link</xsl:text>
-            <xsl:if test="count($this-page-node|./self::*) = 1">
+            <xsl:if test="$b-active">
                 <xsl:text> active</xsl:text>
             </xsl:if>
             <xsl:if test="$b-contains-sublist">
                 <xsl:text> toc-contains-nested</xsl:text>
-                <xsl:if test="not($b-can-expand) or $b-in-this-subtree">
+                <xsl:if test="not($b-can-expand) or $b-in-this-subtree or $b-active">
                     <xsl:text> toc-nested-shown</xsl:text>
                 </xsl:if>
             </xsl:if>
@@ -10864,14 +10865,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         </xsl:if>
                     </xsl:attribute>
                     <xsl:if test="$b-can-expand">
+                        <xsl:attribute name="tabindex">
+                            <xsl:text>0</xsl:text>
+                        </xsl:attribute>
                         <span class="toc-caret-show">
                             <xsl:call-template name="toc-item-caret">
-                                <xsl:with-param name="b-in-subtree" select="$b-in-this-subtree" />
+                                <xsl:with-param name="b-expanded" select="$b-in-this-subtree or $b-active" />
                             </xsl:call-template>
                         </span>
                         <span class="toc-caret-hide">
                             <xsl:call-template name="toc-item-caret">
-                                <xsl:with-param name="b-in-subtree" select="not($b-in-this-subtree)" />
+                                <xsl:with-param name="b-expanded" select="not($b-in-this-subtree or $b-active)" />
                             </xsl:call-template>
                         </span>
                     </xsl:if>
@@ -10916,9 +10920,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template name="toc-item-caret">
-    <xsl:param name = "b-in-subtree" />
+    <xsl:param name = "b-expanded" />
     <xsl:choose>
-        <xsl:when test="$b-in-subtree">
+        <xsl:when test="$b-expanded">
             <!-- down arrow for expanded item -->
             <xsl:text disable-output-escaping="yes"><![CDATA[&#x25be;]]></xsl:text>
         </xsl:when>

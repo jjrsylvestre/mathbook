@@ -6,24 +6,24 @@ then
 	exit 1
 fi
 
-TMPOUTD=/run/user/${UID}/pretext/${1}/html
+TMPOUTD_BASE=/run/user/${UID}/pretext
+TMPOUTD=${TMPOUTD_BASE}/testing/fork/${1}/html
 
 mkdir -p ${TMPOUTD}/knowl
-mkdir -p build
-if ! test -L build/html
+if ! test -L build
 then
-	ln -s ${TMPOUTD} build/html
+	ln -s ${TMPOUTD_BASE} build
 fi
 
-cp expand.css build/html/developer.css
-cp expand.js build/html/expand.js
+cp expand.css ${TMPOUTD}/developer.css
+cp expand.js ${TMPOUTD}/expand.js
 
 ${HOME}/local/src/git/forks/pretext/mathbook/pretext/pretext \
   --verbose \
   --component all \
   --format html \
   --publisher ${1}-pub.xml \
-  --directory build/html \
+  --directory ${TMPOUTD} \
   ${1}.xml
 
 sed -i \
@@ -31,4 +31,4 @@ sed -i \
   -e 's/<link.*colors_default\.css.*>/<!-- & -->/' \
   -e 's/<link.*setcolors\.css.*>/<!-- & -->/' \
   -e 's/<\/head>/<script src="expand.js"><\/script>\n&/' \
-  build/html/*.html
+  ${TMPOUTD}/*.html
